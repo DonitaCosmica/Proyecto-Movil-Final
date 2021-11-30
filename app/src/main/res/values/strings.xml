@@ -5,4 +5,11 @@
     <string name="temporal_cantidad">2489</string>
     <string name="temporal_costo">$13.59</string>
     <string name="temporal_btn">Botón</string>
+    <string name="temporal_proceso">Haciendo Algo...</string>
+
+    <string-array name="tipos_de_gasto">
+        <item>Necesario</item>
+        <item>Entretenimiento</item>
+        <item>Extra</item>
+    </string-array>
 </resources>
