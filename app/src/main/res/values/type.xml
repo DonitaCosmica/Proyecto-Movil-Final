@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- TODO: Crear todos los estilos para texto -->
+
+    <style name="TextAppearance.ProyectoMovilFinal.H2" parent="TextAppearance.MaterialComponents.Headline1">
+        <!-- TODO: Agregar una fuente diferente -->
+        <!-- <item name="fontFamily"></item>-->
+        <item name="android:textColor">@color/black</item>
+    </style>
+</resources>
