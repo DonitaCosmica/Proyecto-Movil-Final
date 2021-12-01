@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "94152767177",
+    "project_id": "gastos-y-pasos",
+    "storage_bucket": "gastos-y-pasos.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:94152767177:android:385b12bb22097fe28d3f18",
+        "android_client_info": {
+          "package_name": "com.example.proyectomovilfinal"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "94152767177-bmphli5cakrc2kgkpd4dpapqitv738le.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDuaoofgZUWDeiZcfYJSmhOK6DL8UwDU-M"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "94152767177-bmphli5cakrc2kgkpd4dpapqitv738le.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
