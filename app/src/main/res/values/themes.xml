@@ -11,10 +11,12 @@
         <item name="colorOnSecondary">@color/black</item>
         <!-- Status bar color. -->
         <item name="android:statusBarColor" tools:targetApi="l">?attr/colorPrimaryVariant</item>
+        <item name="android:navigationBarColor">?attr/colorPrimary</item>
         <!-- Customize your theme here. -->
 
         <!-- Tipografia -->
         <item name="textAppearanceHeadline1">@style/TextAppearance.ProyectoMovilFinal.H1</item>
         <item name="textAppearanceHeadline2">@style/TextAppearance.ProyectoMovilFinal.H2</item>
+        <item name="textAppearanceBody1">@style/TextAppearance.ProyectoMovilFinal.Body1</item>
     </style>
 </resources>
