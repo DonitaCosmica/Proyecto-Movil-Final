@@ -1,4 +1,4 @@
-package com.example.proyectomovilfinal.paginas;
+package com.example.proyectomovilfinal.paginas.adapters;
 
 import android.util.Log;
 import android.view.LayoutInflater;

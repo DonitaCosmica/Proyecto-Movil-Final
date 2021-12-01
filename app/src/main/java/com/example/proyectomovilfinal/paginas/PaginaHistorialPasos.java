@@ -13,30 +13,29 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.proyectomovilfinal.R;
 import com.example.proyectomovilfinal.data.DummyContent;
-import com.example.proyectomovilfinal.paginas.adapters.AdapterHistorialGastos;
+import com.example.proyectomovilfinal.paginas.adapters.AdapterHistorialPasos;
 
 /**
  * A fragment representing a list of Items.
  */
-public class PaginaHistorialGastos extends Fragment {
+public class PaginaHistorialPasos extends Fragment {
 
-    // TODO: Customize parameter argument names
+    // TODO: Definir si hacen falta los parametros del fragmento.
     private static final String ARG_COLUMN_COUNT = "column-count";
-    // TODO: Customize parameters
     private int mColumnCount = 1;
 
     /**
      * Mandatory empty constructor for the fragment manager to instantiate the
      * fragment (e.g. upon screen orientation changes).
      */
-    public PaginaHistorialGastos()
+    public PaginaHistorialPasos()
     {}
 
-    // TODO: Customize parameter initialization
+    // TODO: Inicializacion con parametros
     @SuppressWarnings("unused")
-    public static PaginaHistorialGastos newInstance(int columnCount)
+    public static PaginaHistorialPasos newInstance(int columnCount)
     {
-        PaginaHistorialGastos fragment = new PaginaHistorialGastos();
+        PaginaHistorialPasos fragment = new PaginaHistorialPasos();
         Bundle args = new Bundle();
         args.putInt(ARG_COLUMN_COUNT, columnCount);
         fragment.setArguments(args);
@@ -58,10 +57,10 @@ public class PaginaHistorialGastos extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState)
     {
-        View view = inflater.inflate(R.layout.pagina_historial_gastos, container, false);
+        View view = inflater.inflate(R.layout.pagina_historial_pasos, container, false);
 
         // Set the adapter
-        RecyclerView recyclerView = view.findViewById(R.id.lista_historial_gastos);
+        RecyclerView recyclerView = view.findViewById(R.id.lista_historial_pasos);
 
         if (recyclerView != null)
         {
@@ -75,7 +74,7 @@ public class PaginaHistorialGastos extends Fragment {
             {
                 recyclerView.setLayoutManager(new GridLayoutManager(context, mColumnCount));
             }
-            recyclerView.setAdapter(new AdapterHistorialGastos(DummyContent.ITEMS));
+            recyclerView.setAdapter(new AdapterHistorialPasos(DummyContent.ITEMS));
         }
 
         return view;
