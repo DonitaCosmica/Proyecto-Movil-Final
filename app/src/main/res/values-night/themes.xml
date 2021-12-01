@@ -1,12 +1,9 @@
 <resources xmlns:tools="http://schemas.android.com/tools">
     <!-- Base application theme. -->
     <style name="Theme.ProyectoMovilFinal" parent="Theme.MaterialComponents.DayNight">
-        <!-- Colores -->
-
         <!-- Color primario -->
         <item name="colorPrimary">@color/purple_200</item>
         <item name="colorPrimaryVariant">@color/purple_700</item>
-
 
         <!-- Color secundario. -->
         <item name="colorSecondary">@color/teal_200</item>
@@ -20,5 +17,9 @@
         <!-- Status bar color. -->
         <item name="android:statusBarColor" tools:targetApi="l">?attr/colorPrimaryVariant</item>
         <!-- Customize your theme here. -->
+
+        <!-- Tipografia -->
+        <item name="textAppearanceHeadline1">@style/TextAppearance.ProyectoMovilFinal.H1</item>
+        <item name="textAppearanceHeadline2">@style/TextAppearance.ProyectoMovilFinal.H2</item>
     </style>
 </resources>

@@ -14,6 +14,8 @@
         <!-- Customize your theme here. -->
 
         <!-- Tipografia -->
+        <item name="textAppearanceHeadline1">@style/TextAppearance.ProyectoMovilFinal.H1</item>
         <item name="textAppearanceHeadline2">@style/TextAppearance.ProyectoMovilFinal.H2</item>
+        <item name="textAppearanceBody1">@style/TextAppearance.ProyectoMovilFinal.Body1</item>
     </style>
 </resources>
