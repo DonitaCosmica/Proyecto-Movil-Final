@@ -1,7 +1,6 @@
 package com.example.proyectomovilfinal.paginas.adapters;
 
 import android.content.res.Resources;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -16,12 +15,15 @@ import com.example.proyectomovilfinal.data.DummyContent.DummyItem;
 import com.example.proyectomovilfinal.data.Gasto;
 import com.firebase.ui.firestore.FirestoreRecyclerAdapter;
 import com.firebase.ui.firestore.FirestoreRecyclerOptions;
+import com.google.firebase.firestore.DocumentSnapshot;
 
 /**
  * {@link RecyclerView.Adapter} that can display a {@link DummyItem}.
  * TODO: Reemplazar la implementacion para usar nuestro propio tipo de dato.
  */
 public class AdapterHistorialGastos extends FirestoreRecyclerAdapter<Gasto, AdapterHistorialGastos.ViewHolder> {
+
+    private OnItemClickListener mListener;
 
     /**
      * Crear un nuevo RecyclerView que escucha a un Query de Firestore.  Vea {@link
@@ -46,8 +48,12 @@ public class AdapterHistorialGastos extends FirestoreRecyclerAdapter<Gasto, Adap
         return new ViewHolder(view);
     }
 
+    public void eliminarGasto(int posicion) {
+        getSnapshots().getSnapshot(posicion).getReference().delete();
+        notifyItemRemoved(posicion);
+    }
 
-    public static class ViewHolder extends RecyclerView.ViewHolder
+    public class ViewHolder extends RecyclerView.ViewHolder
     {
         private TextView mTituloTarjeta;
         private TextView mSubtituloTarjeta;
@@ -60,6 +66,16 @@ public class AdapterHistorialGastos extends FirestoreRecyclerAdapter<Gasto, Adap
             mSubtituloTarjeta = view.findViewById(R.id.subtitulo_tarjeta);
             mTextoFinalTarjeta = view.findViewById(R.id.texto_final_tarjeta);
             mIconoTarjeta = view.findViewById(R.id.icono_tarjeta);
+
+            view.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    int posicion = getAbsoluteAdapterPosition();
+                    if (posicion != RecyclerView.NO_POSITION && mListener != null) {
+                        mListener.onItemClick(getSnapshots().getSnapshot(posicion), posicion);
+                    }
+                }
+            });
         }
 
         public void bind(final Gasto gasto) {
@@ -69,9 +85,15 @@ public class AdapterHistorialGastos extends FirestoreRecyclerAdapter<Gasto, Adap
             mTituloTarjeta.setText(gasto.getDescripcion());
             mSubtituloTarjeta.setText(gasto.getFecha().toString());
             mTextoFinalTarjeta.setText("$" + gasto.getCantidad());
-
-            Log.i("AdaptadorGastos", gasto.getTipo() + "");
 //            mIconoTarjeta.setImageResource(res.getDrawable(R.drawable.ic_baseline_check_24, ));
         }
+    }
+
+    public interface OnItemClickListener {
+        void onItemClick(DocumentSnapshot documento, int posicion);
+    }
+
+    public void setOnItemClickListener(OnItemClickListener listener) {
+        mListener = listener;
     }
 }

@@ -1,10 +1,11 @@
 package com.example.proyectomovilfinal.paginas;
 
+import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
@@ -13,16 +14,14 @@ import androidx.recyclerview.widget.ItemTouchHelper;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.example.proyectomovilfinal.AgregarGastoActivity;
 import com.example.proyectomovilfinal.R;
 import com.example.proyectomovilfinal.data.Gasto;
 import com.example.proyectomovilfinal.paginas.adapters.AdapterHistorialGastos;
 import com.firebase.ui.firestore.FirestoreRecyclerOptions;
-import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.Task;
+import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.Query;
-import com.google.firebase.firestore.QueryDocumentSnapshot;
-import com.google.firebase.firestore.QuerySnapshot;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -75,24 +74,6 @@ public class PaginaHistorialGastos extends Fragment {
         }
 
         mFirestore = FirebaseFirestore.getInstance();
-
-        mFirestore.collection(Gasto.NOMBRE_COLECCION_FIRESTORE)
-            .limit(10)
-            .orderBy("fecha", Query.Direction.DESCENDING)
-            .get()
-            .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
-                @Override
-                public void onComplete(@NonNull Task<QuerySnapshot> task) {
-                    if (task.isSuccessful()) {
-                        for (QueryDocumentSnapshot doc : task.getResult()) {
-                            Log.d(TAG, doc.getId() + " => " + doc.getData());
-                        }
-                    }
-                    else {
-                        Log.e(TAG, "Error obteniendo gastos: ", task.getException());
-                    }
-                }
-            });
     }
 
     @Override
@@ -131,7 +112,7 @@ public class PaginaHistorialGastos extends Fragment {
 
         FirestoreRecyclerOptions<Gasto> opciones = new FirestoreRecyclerOptions.Builder<Gasto>()
             .setQuery(query, Gasto.class)
-                .build();
+            .build();
 
         mAdapter = new AdapterHistorialGastos(opciones);
 
@@ -147,6 +128,7 @@ public class PaginaHistorialGastos extends Fragment {
             mRecyclerView.setLayoutManager(new GridLayoutManager(view.getContext(), mColumnCount));
         }
 
+        mRecyclerView.setHasFixedSize(true);
         mRecyclerView.setAdapter(mAdapter);
         mAdapter.notifyDataSetChanged();
 
@@ -154,10 +136,20 @@ public class PaginaHistorialGastos extends Fragment {
         ItemTouchHelper helper = new ItemTouchHelper(mCallback);
 
         helper.attachToRecyclerView(mRecyclerView);
+
+        mAdapter.setOnItemClickListener(new AdapterHistorialGastos.OnItemClickListener() {
+            @Override
+            public void onItemClick(DocumentSnapshot documento, int posicion) {
+                String idGasto = documento.getId();
+                Intent intent = new Intent(getActivity(), AgregarGastoActivity.class);
+                intent.putExtra(AgregarGastoActivity.ID_GASTO, idGasto);
+                startActivity(intent);
+            }
+        });
     }
 
     ItemTouchHelper.SimpleCallback mCallback = new ItemTouchHelper.SimpleCallback(
-            0, ItemTouchHelper.LEFT | ItemTouchHelper.RIGHT)
+            0, ItemTouchHelper.LEFT)
     {
         @Override
         public boolean onMove(
@@ -177,12 +169,8 @@ public class PaginaHistorialGastos extends Fragment {
 
             if (ItemTouchHelper.LEFT == direction)
             {
-                mAdapter.notifyDataSetChanged();
-                Log.i("HistorialGastos", "Eliminar gasto en la posicion " + posicion);
-            }
-            else if (ItemTouchHelper.RIGHT == direction)
-            {
-                Log.i("HistorialGastos", "Editar gasto en la posicion " + posicion);
+                mAdapter.eliminarGasto(posicion);
+                Toast.makeText(getContext(), "Gasto eliminado", Toast.LENGTH_SHORT).show();
             }
         }
     };

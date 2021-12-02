@@ -2,6 +2,7 @@ package com.example.proyectomovilfinal.data;
 
 import androidx.annotation.NonNull;
 
+import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.ServerTimestamp;
 
 import java.util.Date;
@@ -58,6 +59,22 @@ public class Gasto {
         return documento;
     }
 
+    public static Gasto fromDoc(DocumentSnapshot doc) {
+
+        if (!doc.exists()) return new Gasto();
+
+        Gasto gasto = new Gasto(
+            doc.getString(CAMPO_ID_USUARIO),
+            doc.getDouble(CAMPO_CANTIDAD),
+            tipoDesdeString(doc.getString(CAMPO_TIPO)),
+            Math.toIntExact(doc.getLong(CAMPO_CATEGORIA)),
+            doc.getString(CAMPO_DESCRIPCION)
+        );
+
+        gasto.setFecha(doc.getDate(CAMPO_FECHA));
+        return gasto;
+    }
+
     // Get/Set
     public String getIdUsuario() {
         return mIdUsuario;
@@ -102,11 +119,22 @@ public class Gasto {
         mCategoria = categoria;
     }
 
-    public String getTipo() {
-        return mTipo.toString();
+    public TipoGasto getTipo() {
+        return mTipo;
     }
 
     public void setTipo(TipoGasto tipo) {
         mTipo = tipo;
+    }
+
+    private static TipoGasto tipoDesdeString(final String tipoStr) {
+        switch (tipoStr) {
+            case "ENTRETENIMIENTO":
+                return TipoGasto.ENTRETENIMIENTO;
+            case "EXTRA":
+                return TipoGasto.EXTRA;
+
+            default: return TipoGasto.NECESARIO;
+        }
     }
 }

@@ -7,6 +7,15 @@
     <string name="temporal_btn">Botón</string>
     <string name="temporal_proceso">Haciendo Algo...</string>
 
+    <string name="titulo_nuevo_gasto">Agregar un gasto</string>
+    <string name="titulo_editar_gasto">Modificar un gasto</string>
+
+    <!-- Notificaciones -->
+    <string name="nombre_canal_notif">Recordatorios de presupuesto</string>
+    <string name="descripcion_canal_notif">Envvía una notificación cuando excedes tu presupuesto diario.</string>
+
+    <string name="titulo_notificacion_presupuesto">Alerta de Presupuesto</string>
+    <string name="contenido_notificacion_presupuesto">Superaste tu presupuesto diario por $</string>
     <string-array name="tipos_de_gasto">
         <item>Necesario</item>
         <item>Entretenimiento</item>
