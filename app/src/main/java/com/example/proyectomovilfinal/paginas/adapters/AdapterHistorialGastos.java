@@ -1,72 +1,74 @@
 package com.example.proyectomovilfinal.paginas.adapters;
 
-import android.util.Log;
+import android.content.res.Resources;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
 
+import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.proyectomovilfinal.R;
 import com.example.proyectomovilfinal.data.DummyContent.DummyItem;
-
-import java.util.List;
+import com.example.proyectomovilfinal.data.Gasto;
+import com.firebase.ui.firestore.FirestoreRecyclerAdapter;
+import com.firebase.ui.firestore.FirestoreRecyclerOptions;
 
 /**
  * {@link RecyclerView.Adapter} that can display a {@link DummyItem}.
  * TODO: Reemplazar la implementacion para usar nuestro propio tipo de dato.
  */
-public class AdapterHistorialGastos extends RecyclerView.Adapter<AdapterHistorialGastos.ViewHolder> {
+public class AdapterHistorialGastos extends FirestoreRecyclerAdapter<Gasto, AdapterHistorialGastos.ViewHolder> {
 
-    private final List<DummyItem> mValues;
-
-    public AdapterHistorialGastos(List<DummyItem> items) {
-        mValues = items;
+    /**
+     * Crear un nuevo RecyclerView que escucha a un Query de Firestore.  Vea {@link
+     * FirestoreRecyclerOptions} para opciones de configuracion.
+     *
+     * @param options
+     */
+    public AdapterHistorialGastos(@NonNull FirestoreRecyclerOptions<Gasto> options) {
+        super(options);
     }
 
     @Override
-    public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType)
-    {
+    protected void onBindViewHolder(@NonNull ViewHolder holder, int position, @NonNull Gasto gasto) {
+        holder.bind(gasto);
+    }
+
+    @NonNull
+    @Override
+    public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(parent.getContext())
-                .inflate(R.layout.tarjeta_con_icono, parent, false);
+                    .inflate(R.layout.tarjeta_con_icono, parent, false);
         return new ViewHolder(view);
     }
 
-    @Override
-    public void onBindViewHolder(final ViewHolder holder, int position)
-    {
-        holder.mItem = mValues.get(position);
-
-        holder.mNumeroTarjeta.setText(mValues.get(position).id);
-        holder.mTituloTarjeta.setText(mValues.get(position).content);
-    }
-
-    @Override
-    public int getItemCount() {
-        return mValues.size();
-    }
 
     public static class ViewHolder extends RecyclerView.ViewHolder
     {
-        public final View mView;
-        public TextView mTituloTarjeta;
-        public TextView mNumeroTarjeta;
-        public DummyItem mItem;
+        private TextView mTituloTarjeta;
+        private TextView mSubtituloTarjeta;
+        private TextView mTextoFinalTarjeta;
+        private ImageView mIconoTarjeta;
 
-        public ViewHolder(View view)
-        {
+        public ViewHolder(View view) {
             super(view);
-            mView = view;
-            Log.i("AdapterHistorial", String.valueOf(view == null));
-            mTituloTarjeta = (TextView) view.findViewById(R.id.titulo_tarjeta);
-            mNumeroTarjeta = (TextView) view.findViewById(R.id.texto_final_tarjeta);
+            mTituloTarjeta = view.findViewById(R.id.titulo_tarjeta);
+            mSubtituloTarjeta = view.findViewById(R.id.subtitulo_tarjeta);
+            mTextoFinalTarjeta = view.findViewById(R.id.texto_final_tarjeta);
+            mIconoTarjeta = view.findViewById(R.id.icono_tarjeta);
         }
 
-        @Override
-        public String toString()
-        {
-            return super.toString() + " '" + mTituloTarjeta.getText() + "'";
+        public void bind(final Gasto gasto) {
+
+            Resources res = itemView.getResources();
+
+            mTituloTarjeta.setText(gasto.getDescripcion());
+            mSubtituloTarjeta.setText(gasto.getFecha().toString());
+            mTextoFinalTarjeta.setText("$" + gasto.getCantidad());
+//            mIconoTarjeta.setImageResource(res.getDrawable(R.drawable.ic_baseline_check_24, ));
         }
     }
 }

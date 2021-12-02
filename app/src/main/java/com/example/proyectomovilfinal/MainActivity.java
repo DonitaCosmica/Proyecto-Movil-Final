@@ -6,7 +6,7 @@ import android.os.Bundle;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 
-import com.example.proyectomovilfinal.paginas.PaginaHistorialPasos;
+import com.example.proyectomovilfinal.paginas.PaginaHistorialGastos;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 public class MainActivity extends AppCompatActivity {
@@ -19,8 +19,8 @@ public class MainActivity extends AppCompatActivity {
         // TEMPORAL: Mostrar pagina de historial por default, sin navegacion.
         // TODO: Implementar navegacion en MainActivity.
 //        Fragment fragmentoPagina = new PaginaInicio();
-//        Fragment fragmentoPagina = new PaginaHistorialGastos();
-        Fragment fragmentoPagina = new PaginaHistorialPasos();
+        Fragment fragmentoPagina = new PaginaHistorialGastos();
+//        Fragment fragmentoPagina = new PaginaHistorialPasos();
 
         if(savedInstanceState == null && findViewById(R.id.fragmento_pagina) != null)
         {
