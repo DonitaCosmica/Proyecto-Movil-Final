@@ -46,7 +46,7 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="16dp"
             android:ems="10"
-            android:inputType="number"
+            android:inputType="numberDecimal"
             android:hint="@string/temporal_costo"
             app:layout_constraintTop_toBottomOf="@id/spinner_tipo_gasto"
             app:layout_constraintStart_toStartOf="parent"

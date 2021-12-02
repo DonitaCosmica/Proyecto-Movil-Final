@@ -1,6 +1,7 @@
 package com.example.proyectomovilfinal.paginas.adapters;
 
 import android.content.res.Resources;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -68,6 +69,8 @@ public class AdapterHistorialGastos extends FirestoreRecyclerAdapter<Gasto, Adap
             mTituloTarjeta.setText(gasto.getDescripcion());
             mSubtituloTarjeta.setText(gasto.getFecha().toString());
             mTextoFinalTarjeta.setText("$" + gasto.getCantidad());
+
+            Log.i("AdaptadorGastos", gasto.getTipo() + "");
 //            mIconoTarjeta.setImageResource(res.getDrawable(R.drawable.ic_baseline_check_24, ));
         }
     }

@@ -11,6 +11,7 @@ public class Gasto {
 
     public static final String NOMBRE_COLECCION_FIRESTORE = "gastos";
 
+     // Nombres de los campos en los documentos de Firestore.
     public static final String CAMPO_ID_USUARIO = "idUsuario";
     public static final String CAMPO_CANTIDAD = "cantidad";
     public static final String CAMPO_CATEGORIA = "categoria";
@@ -47,28 +48,14 @@ public class Gasto {
     public HashMap<String, Object> asDoc() {
         HashMap<String, Object> documento = new HashMap<>();
 
-        documento.put("idUsuario", mIdUsuario);
-        documento.put("cantidad", mCantidad);
-        documento.put("categoria", mCategoria);
-        documento.put("tipo", TipoGasto.NECESARIO);
-        documento.put("descripcion", mDescripcion);
-        documento.put("fecha", mFecha);
+        documento.put(CAMPO_ID_USUARIO, mIdUsuario);
+        documento.put(CAMPO_CANTIDAD, mCantidad);
+        documento.put(CAMPO_CATEGORIA, mCategoria);
+        documento.put(CAMPO_TIPO, mTipo);
+        documento.put(CAMPO_DESCRIPCION, mDescripcion);
+        documento.put(CAMPO_FECHA, mFecha);
 
         return documento;
-    }
-
-    public static Gasto fromDoc(HashMap<String, Object> doc) {
-
-//        Gasto gasto = new Gasto(
-//            doc.get("idUsuario").toString(),
-//            doc.get("cantidad"),
-//            doc.get("descripcion").tos,
-//            doc.get("fecha"),
-//            doc.get("categoria"),
-//            doc.get("tipo")
-//        );
-
-        return new Gasto();
     }
 
     // Get/Set
@@ -115,11 +102,11 @@ public class Gasto {
         mCategoria = categoria;
     }
 
-//    public TipoGasto getTipo() {
-//        return mTipo;
-//    }
-//
-//    public void setTipo(TipoGasto tipo) {
-//        mTipo = tipo;
-//    }
+    public String getTipo() {
+        return mTipo.toString();
+    }
+
+    public void setTipo(TipoGasto tipo) {
+        mTipo = tipo;
+    }
 }
