@@ -32,9 +32,10 @@ import com.google.firebase.firestore.FirebaseFirestore;
 import java.text.DecimalFormat;
 
 /**
- * A simple {@link Fragment} subclass.
- * Use the {@link FormularioGasto#newInstance} factory method to
- * create an instance of this fragment.
+ * Una subclase de {@link Fragment} que crea y modifica gastos usando
+ * GUI.
+ * EL metodo de factory {@link FormularioGasto#newInstance} puede ser
+ * usado para crear nuevas instancias de este fragmento.
  */
 public class FormularioGasto extends Fragment {
 
@@ -45,27 +46,31 @@ public class FormularioGasto extends Fragment {
 
     private String mIdGasto;
 
+    // Vistas del formulario.
     private Spinner mSpinnerTipo;
     private EditText mEditCantidad;
     private EditText mEditDescripcion;
 
+    //TODO: Usar el id y presupuesto diario reales del usuario para crear gasto.
+    private final String ID_USUARIO_FAKE = "pXqACrhyoqZpdw8n11n64749YuI2";
+
     private Gasto mGasto;
     private boolean mNuevoGasto = true;
+    private double mPresupuestoDiario;
 
     private FirebaseFirestore mFirestore;
 
     public FormularioGasto() {
-        // Required empty public constructor
+        // Constructor publico vacio requerido.
     }
 
     /**
-     * Use this factory method to create a new instance of
-     * this fragment using the provided parameters.
+     * Crea una nueva instancia de {@link FormularioGasto} usando
+     * los argumentos especificados.
      *
-     * @param idGasto Parameter 1.
-     * @return A new instance of fragment DatosGasto.
+     * @param idGasto El id del gasto, para editar.
+     * @return Una nueva instancia de FormularioGasto.
      */
-    // TODO: Rename and change types and number of parameters
     public static FormularioGasto newInstance(String idGasto) {
         FormularioGasto fragment = new FormularioGasto();
         Bundle args = new Bundle();
@@ -77,6 +82,8 @@ public class FormularioGasto extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        // Obtiene el id del gasto de los argumentos recibidos.
         if (getArguments() != null) {
             mIdGasto = getArguments().getString(ID_GASTO);
         }
@@ -84,18 +91,21 @@ public class FormularioGasto extends Fragment {
         mFirestore = FirebaseFirestore.getInstance();
 
         // Si este fragmento recibe el id del gasto, significa que debe actualizarlo (en vez
-        // de crear).
+        // de crear uno nuevo).
         if (mIdGasto != null && !mIdGasto.isEmpty()) {
-            obtenerGastoDeFirestore(mIdGasto);
+            getGastoDeFirestore(mIdGasto);
             mNuevoGasto = false;
         }
+
+        // Obtener presupuesto diario.
+        getPresupuestoDiario(ID_USUARIO_FAKE);
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState)
     {
-        // Inflate the layout for this fragment
+        // Infla el layout para el fragmento.
         View view = inflater.inflate(R.layout.fragment_datos_gasto, container, false);
 
         // Configura el spinner de tipo de gasto usando un array de strings en recursos.
@@ -127,13 +137,14 @@ public class FormularioGasto extends Fragment {
         {
             guardarGasto();
             Toast.makeText(getActivity(), R.string.temporal_proceso, Toast.LENGTH_SHORT).show();
-            getActivity().finish();
+
+            if (getActivity() != null) getActivity().finish();
         });
 
         return view;
     }
 
-    private void obtenerGastoDeFirestore(final String idGasto) {
+    private void getGastoDeFirestore(final String idGasto) {
         mFirestore.collection(Gasto.NOMBRE_COLECCION_FIRESTORE).document(idGasto)
                 .get()
                 .addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
@@ -148,14 +159,24 @@ public class FormularioGasto extends Fragment {
                 });
     }
 
+    private void getPresupuestoDiario(final String idUsuario) {
+        mFirestore.collection("usuarios").document(idUsuario)
+                .get()
+                .addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+                    @Override
+                    public void onSuccess(DocumentSnapshot snapshot) {
+//                        Usuario datosUsuario = Usuario.fromDoc(snapshot);
+
+//                        mPresupuestoDiario = datosUsuario.presupuesto;
+                        mPresupuestoDiario = 500.0f;
+                    }
+                });
+    }
+
     private void guardarGasto() {
 
         //TODO: Mejorar validacion y manejo de errores.
         if (mEditCantidad.getText().toString().isEmpty()) return;
-
-        //TODO: Usar el id y presupuesto diario reales del usuario para crear gasto.
-        final String ID_USUARIO_FAKE = "pXqACrhyoqZpdw8n11n64749YuI2";
-        final double PRESUPUESTO_DIARIO_FAKE = 500.0;
 
         final double cantidad = Double.parseDouble(mEditCantidad.getText().toString());
         final String descripcion = mEditDescripcion.getText().toString();
@@ -164,8 +185,9 @@ public class FormularioGasto extends Fragment {
 
         if (cantidad < 0) return;
 
-        if (cantidad > PRESUPUESTO_DIARIO_FAKE) {
-            enviarNotificacionDePresupuesto(cantidad - PRESUPUESTO_DIARIO_FAKE);
+        //TODO: Calcular el gasto total del dia.
+        if (cantidad > mPresupuestoDiario) {
+            enviarNotificacionDePresupuesto(cantidad - mPresupuestoDiario);
         }
 
         if (mNuevoGasto) {
@@ -199,12 +221,17 @@ public class FormularioGasto extends Fragment {
         }
     }
 
+    /**
+     * Envía una notificación de alerta con el presupuesto excedido.
+     *
+     * @param gastoExtra la diferencia entre el gasto total diario y el presupuesto.
+     */
     private void enviarNotificacionDePresupuesto(double gastoExtra) {
 
         Intent intent = new Intent(getActivity(), MainActivity.class);
         PendingIntent pendingIntent = PendingIntent.getActivity(getActivity(), 0, intent, 0);
 
-        NotificationCompat.Builder builder = new NotificationCompat.Builder(getContext(), MainActivity.ID_CANAL_RECORDATORIOS)
+        NotificationCompat.Builder builder = new NotificationCompat.Builder(getContext(), getString(R.string.id_canal_notif))
                 .setSmallIcon(R.drawable.ic_launcher_foreground)
                 .setContentTitle(getString(R.string.titulo_notificacion_presupuesto))
                 .setContentText(getString(R.string.contenido_notificacion_presupuesto) + formatoDinero.format(gastoExtra))
@@ -220,6 +247,13 @@ public class FormularioGasto extends Fragment {
         Log.i(TAG, "Notificacion enviada");
     }
 
+    /**
+     * Convierte un número entero entre 0 y 2 en un valor del enum {@link TipoGasto}.
+     *
+     * @param opcion un número entero que represente un valor de {@link TipoGasto}
+     * @return el valor de {@link TipoGasto} correspondiente.
+     * @throws IllegalArgumentException si el número no tiene el valor de ninguno del enum.
+     */
     private TipoGasto getTipoDeGasto(int opcion) {
         switch (opcion) {
             case 0:
