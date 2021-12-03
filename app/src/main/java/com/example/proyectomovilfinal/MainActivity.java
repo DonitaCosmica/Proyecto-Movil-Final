@@ -11,9 +11,14 @@ import androidx.navigation.ui.NavigationUI;
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
+import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseAuthSettings;
 
 public class MainActivity extends AppCompatActivity {
 
+    private FirebaseAuth mAuth;
+  
     private static final int VISTA_INICIO = R.id.fragmento_inicio;
     private static final int VISTA_HISTORIAL_GASTOS = R.id.fragmento_gastos;
     private static final int VISTA_HISTORIAL_PASOS = R.id.fragmento_pasos;
@@ -24,6 +29,9 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        mAuth = FirebaseAuth.getInstance();
+        
+        // Navegacion con barra inferior.
         BottomNavigationView navView = findViewById(R.id.bottom_nav);
 
         AppBarConfiguration configAppBar = new AppBarConfiguration.Builder(
@@ -37,20 +45,7 @@ public class MainActivity extends AppCompatActivity {
         NavigationUI.setupActionBarWithNavController(this, controladorNav, configAppBar);
         NavigationUI.setupWithNavController(navView, controladorNav);
 
-        // TEMPORAL: Mostrar pagina de historial por default, sin navegacion.
-        // TODO: Implementar navegacion en MainActivity.
-//        Fragment fragmentoPagina = new PaginaInicio();
-////        Fragment fragmentoPagina = new PaginaHistorialGastos();
-////        Fragment fragmentoPagina = new PaginaHistorialPasos();
-//
-//        if (savedInstanceState == null && findViewById(R.id.fragmento_pagina) != null) {
-//            getSupportFragmentManager().beginTransaction()
-//                    .setReorderingAllowed(true)
-//                    .add(R.id.fragmento_pagina, fragmentoPagina, null)
-//                    .commit();
-//        }
-
-        // El boton agrega un nuevo gasto.
+        // El botón agrega un nuevo gasto.
         FloatingActionButton fabAgregarGasto = findViewById(R.id.fab_agregar_gasto);
         fabAgregarGasto.setOnClickListener(view -> {
             Intent intent = new Intent(MainActivity.this, AgregarGastoActivity.class);

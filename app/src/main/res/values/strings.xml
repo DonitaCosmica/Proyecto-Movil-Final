@@ -49,4 +49,13 @@
         <item>Entretenimiento</item>
         <item>Extra</item>
     </string-array>
+
+    <!-- Iniciar sesion-->
+    <string name="btn_iniciar_sesion">Iniciar sesion</string>
+    <string name="btn_registrarse">Registrarse</string>
+    <string name="text_correo">Ingrese su correo</string>
+    <string name="text_contrasena">Ingrese la constraseña</string>
+    <string name="text_contrasenaConfirmar">Vuelva a ingresar la contraseña</string>
+    <string name="btn_regresar_iniciarSesion">Regresar</string>
+
 </resources>
