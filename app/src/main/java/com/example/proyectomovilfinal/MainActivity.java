@@ -12,22 +12,26 @@ import androidx.fragment.app.Fragment;
 
 import com.example.proyectomovilfinal.paginas.PaginaHistorialGastos;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
+import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseAuthSettings;
 
 public class MainActivity extends AppCompatActivity {
 
+    private FirebaseAuth mAuth;
     public static final String ID_CANAL_RECORDATORIOS = "canal_recordatorios";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-
+        mAuth = FirebaseAuth.getInstance();
         crearCanalDeNotificaciones();
 
         // TEMPORAL: Mostrar pagina de historial por default, sin navegacion.
         // TODO: Implementar navegacion en MainActivity.
-//        Fragment fragmentoPagina = new PaginaInicio();
-        Fragment fragmentoPagina = new PaginaHistorialGastos();
+//       Fragment fragmentoPagina = new PaginaInicio();
+          Fragment fragmentoPagina = new PaginaHistorialGastos();
 //        Fragment fragmentoPagina = new PaginaHistorialPasos();
 
         if(savedInstanceState == null && findViewById(R.id.fragmento_pagina) != null)
@@ -45,6 +49,7 @@ public class MainActivity extends AppCompatActivity {
         });
     }
 
+
     private void crearCanalDeNotificaciones() {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             CharSequence nombre = getString(R.string.nombre_canal_notif);
@@ -59,4 +64,13 @@ public class MainActivity extends AppCompatActivity {
             Log.i("MainActivity", "Canal creado");
         }
     }
+
+    protected void onStart() {
+        super.onStart();
+
+        if (mAuth.getCurrentUser() == null) {
+            startActivity(new Intent(MainActivity.this, IniciarSesionActivity.class));
+        }
+    }
+
 }
