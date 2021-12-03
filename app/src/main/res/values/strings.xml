@@ -25,7 +25,6 @@
     <string name="titulo_notificacion_presupuesto">Alerta de Presupuesto</string>
     <string name="contenido_notificacion_presupuesto">Superaste tu presupuesto diario por $</string>
 
-
     <!-- Activity Presupuesto Diario -->
     <string name="titulo_definir_presupuesto">Presupuesto diario</string>
     <string name="descripcion_definir_presupuesto">¿Cuánto quieres gastar por día?</string>
@@ -36,6 +35,12 @@
         <item>Entretenimiento</item>
         <item>Extra</item>
     </string-array>
+
+    <!-- Labels bottom nav view -->
+    <string name="bot_nav_inicio">Inicio</string>
+    <string name="bot_nav_gastos">Gastos</string>
+    <string name="bot_nav_pasos">Pasos</string>
+    <string name="bot_nav_perfil">Tu Perfil</string>
 
     <!-- Keys de SharedPreferences -->
     <string name="pref_key_email_usuario">EMAIL_USUARIO</string>

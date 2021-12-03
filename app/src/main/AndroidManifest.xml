@@ -10,10 +10,6 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.ProyectoMovilFinal">
         <activity
-            android:name=".MainActivity2"
-            android:label="@string/title_activity_main2"
-            android:theme="@style/Theme.ProyectoMovilFinal.NoActionBar"></activity>
-        <activity
             android:name=".MainActivity"
             android:theme="@style/Theme.ProyectoMovilFinal" />
         <activity android:name=".PresupuestoDiarioActivity" />
