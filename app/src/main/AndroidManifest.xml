@@ -13,9 +13,15 @@
         <activity android:name=".RegistrarseActivity"></activity>
         <activity android:name=".IniciarSesionActivity" /> //mainactivity
         <activity
+            android:name=".MainActivity"
+            android:theme="@style/Theme.ProyectoMovilFinal" />
+        <activity android:name=".PresupuestoDiarioActivity" />
+        <activity
             android:name=".AgregarGastoActivity"
             android:parentActivityName=".MainActivity" />
-        <activity android:name=".MainActivity"> //iniciarsesionactivity
+        <activity
+            android:name=".SplashScreen"
+            android:theme="@style/SplashScreen">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
