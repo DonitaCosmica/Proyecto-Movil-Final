@@ -1,15 +1,12 @@
 package com.example.proyectomovilfinal.paginas;
 
-import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
 
 import androidx.fragment.app.Fragment;
 
-import com.example.proyectomovilfinal.PresupuestoDiarioActivity;
 import com.example.proyectomovilfinal.R;
 
 /**
@@ -64,16 +61,6 @@ public class PaginaInicio extends Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_pagina_inicio, container, false);
-
-        //TODO: Este boton solo es temporal, mientras acomodamos la navegacion.
-        Button btnEditarPresupuesto = view.findViewById(R.id.btn_temporal_editar_presupuesto);
-        btnEditarPresupuesto.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Intent intent = new Intent(getActivity(), PresupuestoDiarioActivity.class);
-                startActivity(intent);
-            }
-        });
 
         return view;
     }

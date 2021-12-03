@@ -61,7 +61,7 @@ public class FormularioGasto extends Fragment {
     private FirebaseFirestore mFirestore;
 
     public FormularioGasto() {
-        // Constructor publico vacio requerido.
+        // Constructor publico default requerido.
     }
 
     /**
