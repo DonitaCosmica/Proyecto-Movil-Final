@@ -10,9 +10,19 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.ProyectoMovilFinal">
         <activity
+            android:name=".MainActivity2"
+            android:label="@string/title_activity_main2"
+            android:theme="@style/Theme.ProyectoMovilFinal.NoActionBar"></activity>
+        <activity
+            android:name=".MainActivity"
+            android:theme="@style/Theme.ProyectoMovilFinal" />
+        <activity android:name=".PresupuestoDiarioActivity" />
+        <activity
             android:name=".AgregarGastoActivity"
             android:parentActivityName=".MainActivity" />
-        <activity android:name=".MainActivity">
+        <activity
+            android:name=".SplashScreen"
+            android:theme="@style/SplashScreen">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 

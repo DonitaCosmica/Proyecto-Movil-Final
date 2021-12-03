@@ -18,4 +18,17 @@
         <item name="textAppearanceHeadline2">@style/TextAppearance.ProyectoMovilFinal.H2</item>
         <item name="textAppearanceBody1">@style/TextAppearance.ProyectoMovilFinal.Body1</item>
     </style>
+
+    <style name="SplashScreen" parent="Theme.MaterialComponents.DayNight.NoActionBar">
+        <item name="android:windowBackground">@drawable/splash_screen</item>
+    </style>
+
+    <style name="Theme.ProyectoMovilFinal.NoActionBar">
+        <item name="windowActionBar">false</item>
+        <item name="windowNoTitle">true</item>
+    </style>
+
+    <style name="Theme.ProyectoMovilFinal.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar" />
+
+    <style name="Theme.ProyectoMovilFinal.PopupOverlay" parent="ThemeOverlay.AppCompat.Light" />
 </resources>
