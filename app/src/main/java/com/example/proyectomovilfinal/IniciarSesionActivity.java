@@ -21,6 +21,9 @@ import com.google.firebase.auth.FirebaseUser;
 
 import static android.content.ContentValues.TAG;
 
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+
 public class IniciarSesionActivity extends AppCompatActivity {
 
     private FirebaseAuth mAuth;
@@ -47,7 +50,17 @@ public class IniciarSesionActivity extends AppCompatActivity {
     }
 
     public void iniciarSesion(View view){
-        if(!text_correo_inicio.getText().toString().isEmpty() && !text_contrasena_inicio.getText().toString().isEmpty()) {
+        if (!text_correo_inicio.getText().toString().isEmpty() && !text_contrasena_inicio.toString().isEmpty()) {
+            Pattern pattern = Pattern.compile("^[_A-Za-z0-9-\\+]+(\\.[_A-Za-z0-9-]+)*@[A-Za-z0-9-]+(\\.[A-Za-z0-9]+)*(\\.[A-Za-z]{2,})$");
+            Matcher mather = pattern.matcher(text_correo_inicio.getText().toString());
+            boolean correo = mather.matches();
+            if(correo == true){
+                if (text_contrasena_inicio.length() >= 8 && text_contrasena_inicio.length() <= 12) {
+                        //Pattern patron = Pattern.compile(".+[0-9]+.+");
+                        Pattern patron = Pattern.compile("^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d).+$");
+                        Matcher matcher = patron.matcher(text_contrasena_inicio.getText().toString());
+                        boolean numero = matcher.matches();
+                        if (numero == true) {
             mAuth.signInWithEmailAndPassword(text_correo_inicio.getText().toString().trim(), text_contrasena_inicio.getText().toString().trim())
                     .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
                         @Override
@@ -56,7 +69,7 @@ public class IniciarSesionActivity extends AppCompatActivity {
                                 // Sign in success, update UI with the signed-in user's information
                                 Log.d(TAG, "signInWithEmail:success");
                                 FirebaseUser user = mAuth.getCurrentUser();
-                                Toast.makeText(getApplicationContext(), "iniciando sesion.", Toast.LENGTH_SHORT).show();
+                                Toast.makeText(getApplicationContext(), "iniciando sesion", Toast.LENGTH_SHORT).show();
                                 Intent i = new Intent(getApplicationContext(), MainActivity.class);
                                 startActivity(i);
                                 updateUI(user);
@@ -71,9 +84,18 @@ public class IniciarSesionActivity extends AppCompatActivity {
                         private void updateUI(FirebaseUser user) {
                         }
                     });
-        }else{
-            Toast.makeText(getApplicationContext(), "Debe completar los campos", Toast.LENGTH_SHORT).show();
+                        } else {
+                            Toast.makeText(IniciarSesionActivity.this, "La contraseña debe incluir almenos 1 numero", Toast.LENGTH_SHORT).show();
+                        }
+            }else {
+                Toast.makeText(IniciarSesionActivity.this, "La contraseña debe contener de 8 a 12 caracteres", Toast.LENGTH_SHORT).show();
+            }
+        }else {
+            Toast.makeText(IniciarSesionActivity.this, "El correo no tiene un formato correcto", Toast.LENGTH_SHORT).show();
         }
+    }else {
+        Toast.makeText(IniciarSesionActivity.this, "Los espacios estan vacios", Toast.LENGTH_SHORT).show();
+    }
     }
 
     public void irRegistrarse(View view){

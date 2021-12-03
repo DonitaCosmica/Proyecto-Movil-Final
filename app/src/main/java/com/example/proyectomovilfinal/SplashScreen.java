@@ -9,7 +9,12 @@ import android.util.Log;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+
 public class SplashScreen extends AppCompatActivity {
+
+    private FirebaseAuth mAuth;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -19,8 +24,15 @@ public class SplashScreen extends AppCompatActivity {
 
         //TODO: Verificar si hay credenciales o si el usuario ya inicio sesion
         // Ya existen las "llaves" para SharedPreferences en strings.xml.
+        mAuth = FirebaseAuth.getInstance();
+        FirebaseUser currentUser = mAuth.getCurrentUser();
 
-        startActivity(new Intent(this, MainActivity.class));
+        if (mAuth.getCurrentUser() == null) {
+            Log.i("Splash", "el uchuario es nulos");
+            startActivity(new Intent(SplashScreen.this, IniciarSesionActivity.class));
+        }else{
+            startActivity(new Intent(this, MainActivity.class));
+        }
     }
 
     /**
