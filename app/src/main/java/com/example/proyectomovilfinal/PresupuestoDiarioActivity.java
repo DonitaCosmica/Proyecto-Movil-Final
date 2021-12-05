@@ -8,6 +8,7 @@ import android.widget.EditText;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.example.proyectomovilfinal.data.DatosUsuario;
 import com.google.firebase.firestore.FirebaseFirestore;
 
 /**
@@ -23,7 +24,7 @@ public class PresupuestoDiarioActivity extends AppCompatActivity {
 
     private EditText mEditPresupuestoDiario;
 
-//    private Usuario mDatosUsuario;
+    private DatosUsuario mDatosUsuario;
     private FirebaseFirestore mFirestore;
 
     @Override
@@ -36,6 +37,17 @@ public class PresupuestoDiarioActivity extends AppCompatActivity {
         Button btnCancelarPresupuesto = findViewById(R.id.btn_cancelar_presupuesto);
 
         mFirestore = FirebaseFirestore.getInstance();
+
+
+        mDatosUsuario = new DatosUsuario(
+                "pXqACrhyoqZpdw8n11n64749YuI2",
+                "Juan",
+                "Ranchero de Vaca",
+                "juan@su.rancho.com",
+                25,
+                200.0,
+                0
+        );
 
         btnConfirmarPresupuesto.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -55,17 +67,14 @@ public class PresupuestoDiarioActivity extends AppCompatActivity {
     }
 
     private void guardarPresupuestoDiario(float nuevoPresupuesto) {
-        //TODO: Usar el ID y real del usuario para crear gasto.
-        final String ID_USUARIO_FAKE = "pXqACrhyoqZpdw8n11n64749YuI2";
 
-//        mDatosUsuario.setPresupuesto(nuevoPresupuesto);
+        mDatosUsuario.setPresupuesto(nuevoPresupuesto);
 
         Log.i(TAG, "El nuevo presupuesto para el usuario con ID "
-                + ID_USUARIO_FAKE + " es $" + nuevoPresupuesto);
+                + mDatosUsuario.getIdUsuario() + " es $" + mDatosUsuario.getPresupuesto());
 
-        //TODO: Hace falta el modelo para el usuario.
-//        mFirestore.collection("users")
-//                .document(ID_USUARIO_FAKE)
-//                .update(mDatosUsuario.asDoc());
+        mFirestore.collection(DatosUsuario.NOMBRE_COLECCION_FIRESTORE)
+                .document(mDatosUsuario.getIdUsuario())
+                .update(mDatosUsuario.asDoc());
     }
 }

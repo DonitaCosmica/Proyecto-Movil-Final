@@ -1,6 +1,7 @@
 package com.example.proyectomovilfinal.paginas.adapters;
 
 import android.content.res.Resources;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -16,6 +17,9 @@ import com.example.proyectomovilfinal.data.Gasto;
 import com.firebase.ui.firestore.FirestoreRecyclerAdapter;
 import com.firebase.ui.firestore.FirestoreRecyclerOptions;
 import com.google.firebase.firestore.DocumentSnapshot;
+
+import java.text.DateFormat;
+import java.util.Locale;
 
 /**
  * {@link RecyclerView.Adapter} that can display a {@link DummyItem}.
@@ -60,6 +64,8 @@ public class AdapterHistorialGastos extends FirestoreRecyclerAdapter<Gasto, Adap
         private TextView mTextoFinalTarjeta;
         private ImageView mIconoTarjeta;
 
+        DateFormat mFormatoFecha = DateFormat.getDateTimeInstance(DateFormat.SHORT, DateFormat.SHORT, Locale.getDefault());
+
         public ViewHolder(View view) {
             super(view);
             mTituloTarjeta = view.findViewById(R.id.titulo_tarjeta);
@@ -82,8 +88,11 @@ public class AdapterHistorialGastos extends FirestoreRecyclerAdapter<Gasto, Adap
 
             Resources res = itemView.getResources();
 
+            String fechaConFormato = mFormatoFecha.format(gasto.getFecha());
+            Log.i("Historial Gastos", fechaConFormato);
+
             mTituloTarjeta.setText(gasto.getDescripcion());
-            mSubtituloTarjeta.setText(gasto.getFecha().toString());
+            mSubtituloTarjeta.setText(fechaConFormato);
             mTextoFinalTarjeta.setText("$" + gasto.getCantidad());
 //            mIconoTarjeta.setImageResource(res.getDrawable(R.drawable.ic_baseline_check_24, ));
         }

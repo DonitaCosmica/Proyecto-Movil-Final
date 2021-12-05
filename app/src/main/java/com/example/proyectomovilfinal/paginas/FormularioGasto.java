@@ -20,16 +20,23 @@ import androidx.fragment.app.Fragment;
 
 import com.example.proyectomovilfinal.MainActivity;
 import com.example.proyectomovilfinal.R;
+import com.example.proyectomovilfinal.data.DatosUsuario;
 import com.example.proyectomovilfinal.data.Gasto;
 import com.example.proyectomovilfinal.data.TipoGasto;
+import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.gms.tasks.Task;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.QueryDocumentSnapshot;
+import com.google.firebase.firestore.QuerySnapshot;
 
 import java.text.DecimalFormat;
+import java.util.Calendar;
+import java.util.Date;
 
 /**
  * Una subclase de {@link Fragment} que crea y modifica gastos usando
@@ -51,12 +58,13 @@ public class FormularioGasto extends Fragment {
     private EditText mEditCantidad;
     private EditText mEditDescripcion;
 
-    //TODO: Usar el id y presupuesto diario reales del usuario para crear gasto.
+    //TODO: Usar el id real del usuario para crear gasto.
     private final String ID_USUARIO_FAKE = "pXqACrhyoqZpdw8n11n64749YuI2";
 
     private Gasto mGasto;
     private boolean mNuevoGasto = true;
     private double mPresupuestoDiario;
+    private double mGastoTotalDia;
 
     private FirebaseFirestore mFirestore;
 
@@ -99,6 +107,7 @@ public class FormularioGasto extends Fragment {
 
         // Obtener presupuesto diario.
         getPresupuestoDiario(ID_USUARIO_FAKE);
+        getGastoTotal(ID_USUARIO_FAKE);
     }
 
     @Override
@@ -165,10 +174,45 @@ public class FormularioGasto extends Fragment {
                 .addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
                     @Override
                     public void onSuccess(DocumentSnapshot snapshot) {
-//                        Usuario datosUsuario = Usuario.fromDoc(snapshot);
+                        DatosUsuario datosUsuario = DatosUsuario.fromDoc(snapshot);
 
-//                        mPresupuestoDiario = datosUsuario.presupuesto;
-                        mPresupuestoDiario = 500.0f;
+                        mPresupuestoDiario = datosUsuario.getPresupuesto();
+                    }
+                });
+    }
+
+    private void getGastoTotal(final String idUsuario) {
+        Calendar hoy = Calendar.getInstance();
+        hoy.set(Calendar.HOUR, 0);
+        hoy.set(Calendar.MINUTE, 0);
+        hoy.set(Calendar.SECOND, 0);
+        hoy.set(Calendar.MILLISECOND, 0);
+        Date fechaActual = hoy.getTime();
+
+        mFirestore.collection(Gasto.NOMBRE_COLECCION_FIRESTORE)
+                .whereEqualTo(Gasto.CAMPO_ID_USUARIO, idUsuario)
+                .whereGreaterThanOrEqualTo(Gasto.CAMPO_FECHA, fechaActual)
+                .get()
+                .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+
+                    @Override
+                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                        if (task.isSuccessful() && task.getResult() != null)
+                        {
+                            double gastoTotal = 0;
+
+                            for (QueryDocumentSnapshot doc : task.getResult())
+                            {
+                                if (doc.getDouble(Gasto.CAMPO_CANTIDAD) != null) {
+                                    gastoTotal += doc.getDouble(Gasto.CAMPO_CANTIDAD);
+                                }
+                            }
+
+                            mGastoTotalDia = gastoTotal;
+
+                        } else {
+                            Log.d(TAG, "Error obteniendo documentos");
+                        }
                     }
                 });
     }
@@ -185,9 +229,10 @@ public class FormularioGasto extends Fragment {
 
         if (cantidad < 0) return;
 
-        //TODO: Calcular el gasto total del dia.
-        if (cantidad > mPresupuestoDiario) {
-            enviarNotificacionDePresupuesto(cantidad - mPresupuestoDiario);
+        mGastoTotalDia += cantidad;
+
+        if (mGastoTotalDia > mPresupuestoDiario) {
+            enviarNotificacionDePresupuesto(mGastoTotalDia - mPresupuestoDiario);
         }
 
         if (mNuevoGasto) {

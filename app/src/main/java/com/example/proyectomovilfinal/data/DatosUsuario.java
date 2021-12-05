@@ -6,7 +6,7 @@ import java.util.HashMap;
 
 public class DatosUsuario {
 
-    public static final String NOMBRE_COLECCION_FIRESTORE = "usarios";
+    public static final String NOMBRE_COLECCION_FIRESTORE = "usuarios";
 
     public static final String CAMPO_NOMBRE = "nombre";
     public static final String CAMPO_APELLIDO = "apellido";
@@ -25,11 +25,12 @@ public class DatosUsuario {
 
     private DatosUsuario() {}
 
-    public DatosUsuario(String idUsuario, String nombre, String apellido, int edad, double presupuesto, int tipo) {
+    public DatosUsuario(String idUsuario, String nombre, String apellido, String email, int edad, double presupuesto, int tipo) {
         mIdUsuario = idUsuario;
         mNombre = nombre;
         mApellido = apellido;
         mEdad = edad;
+        mEmail = email;
         mPresupuesto = presupuesto;
         mTipo = tipo;
     }
@@ -52,6 +53,7 @@ public class DatosUsuario {
         if (!doc.exists()) return new DatosUsuario();
 
         DatosUsuario datosUsuario = new DatosUsuario(
+            doc.getId(),
             doc.getString(CAMPO_NOMBRE),
             doc.getString(CAMPO_APELLIDO),
             doc.getString(CAMPO_EMAIL),
