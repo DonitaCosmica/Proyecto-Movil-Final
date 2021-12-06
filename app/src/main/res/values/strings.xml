@@ -41,27 +41,24 @@
 
     <!-- Subcategorias -->
     <string name="titulo_subcategorias">¿En qué gastaste?</string>
+    <string name="hint_agregar_categoria">Snacks</string>
+    <string name="dialog_agregar_subcategoria">Crea una nueva subcategoría de gastos.</string>
 
     <!-- Labels bottom nav view -->
     <string name="bot_nav_gastos">Gastos</string>
     <string name="bot_nav_pasos">Pasos</string>
     <string name="bot_nav_perfil">Tu Perfil</string>
-    <string name="pref_key_email_usuario">EMAIL_USUARIO</string>
 
     <!-- Keys de SharedPreferences -->
+    <string name="pref_key_email_usuario">EMAIL_USUARIO</string>
     <string name="pref_key_password_usuario">PASSWORD_USUARIO</string>
-    <string name="btn_iniciar_sesion">Iniciar sesion</string>
 
     <!-- Iniciar sesion-->
+    <string name="btn_iniciar_sesion">Iniciar sesion</string>
     <string name="btn_registrarse">Registrarse</string>
     <string name="text_correo">Ingrese su correo</string>
     <string name="text_contrasena">Ingrese la constraseña</string>
     <string name="text_contrasenaConfirmar">Vuelva a ingresar la contraseña</string>
     <string name="btn_regresar_iniciarSesion">Regresar</string>
-    <string-array name="tipos_de_gasto">
-        <item>Necesario</item>
-        <item>Entretenimiento</item>
-        <item>Extra</item>
-    </string-array>
 
 </resources>

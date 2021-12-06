@@ -7,7 +7,6 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.TextView;
@@ -126,17 +125,6 @@ public class FormularioGasto extends Fragment {
     {
         // Infla el layout para el fragmento.
         View view = inflater.inflate(R.layout.fragment_datos_gasto, container, false);
-
-        //region Puede que eliminemos este spinner.
-        // Configura el spinner de tipo de gasto usando un array de strings en recursos.
-        mSpinnerTipo = view.findViewById(R.id.spinner_tipo_gasto);
-        ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(getActivity(),
-                R.array.tipos_de_gasto, android.R.layout.simple_spinner_item);
-
-        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-
-        mSpinnerTipo.setAdapter(adapter);
-        //endregion
 
         // Bind de los campos del formulario
         mEditCantidad = view.findViewById(R.id.txt_edit_cantidad_gasto);
