@@ -1,7 +1,6 @@
 package com.example.proyectomovilfinal.paginas.adapters;
 
 import android.content.res.Resources;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -23,7 +22,6 @@ import java.util.Locale;
 
 /**
  * {@link RecyclerView.Adapter} that can display a {@link DummyItem}.
- * TODO: Reemplazar la implementacion para usar nuestro propio tipo de dato.
  */
 public class AdapterHistorialGastos extends FirestoreRecyclerAdapter<Gasto, AdapterHistorialGastos.ViewHolder> {
 
@@ -48,7 +46,7 @@ public class AdapterHistorialGastos extends FirestoreRecyclerAdapter<Gasto, Adap
     @Override
     public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(parent.getContext())
-                    .inflate(R.layout.tarjeta_con_icono, parent, false);
+                    .inflate(R.layout.tarjeta_gasto, parent, false);
         return new ViewHolder(view);
     }
 
@@ -89,7 +87,6 @@ public class AdapterHistorialGastos extends FirestoreRecyclerAdapter<Gasto, Adap
             Resources res = itemView.getResources();
 
             String fechaConFormato = mFormatoFecha.format(gasto.getFecha());
-            Log.i("Historial Gastos", fechaConFormato);
 
             mTituloTarjeta.setText(gasto.getDescripcion());
             mSubtituloTarjeta.setText(fechaConFormato);

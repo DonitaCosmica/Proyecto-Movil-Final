@@ -15,14 +15,14 @@ public class Gasto {
      // Nombres de los campos en los documentos de Firestore.
     public static final String CAMPO_ID_USUARIO = "idUsuario";
     public static final String CAMPO_CANTIDAD = "cantidad";
-    public static final String CAMPO_CATEGORIA = "categoria";
+    public static final String CAMPO_ID_CATEGORIA = "categoria";
     public static final String CAMPO_TIPO = "tipo";
     public static final String CAMPO_DESCRIPCION = "descripcion";
     public static final String CAMPO_FECHA = "fecha";
 
     private String mIdUsuario;
     private double mCantidad;
-    private int mCategoria;
+    private String mIdCategoria;
     private TipoGasto mTipo;
     private String mDescripcion;
 
@@ -31,11 +31,11 @@ public class Gasto {
 
     private Gasto(){}
 
-    public Gasto(String idUsuario, double cantidad, TipoGasto tipo, int categoria, String descripcion) {
+    public Gasto(String idUsuario, double cantidad, TipoGasto tipo, String categoria, String descripcion) {
         mIdUsuario = idUsuario;
         mCantidad = cantidad;
         mTipo = tipo;
-        mCategoria = categoria;
+        mIdCategoria = categoria;
         mDescripcion = descripcion;
         mFecha = new Date();
     }
@@ -51,7 +51,7 @@ public class Gasto {
 
         documento.put(CAMPO_ID_USUARIO, mIdUsuario);
         documento.put(CAMPO_CANTIDAD, mCantidad);
-        documento.put(CAMPO_CATEGORIA, mCategoria);
+        documento.put(CAMPO_ID_CATEGORIA, mIdCategoria);
         documento.put(CAMPO_TIPO, mTipo);
         documento.put(CAMPO_DESCRIPCION, mDescripcion);
         documento.put(CAMPO_FECHA, mFecha);
@@ -67,7 +67,7 @@ public class Gasto {
             doc.getString(CAMPO_ID_USUARIO),
             doc.getDouble(CAMPO_CANTIDAD),
             tipoDesdeString(doc.getString(CAMPO_TIPO)),
-            Math.toIntExact(doc.getLong(CAMPO_CATEGORIA)),
+            doc.getString(CAMPO_ID_CATEGORIA),
             doc.getString(CAMPO_DESCRIPCION)
         );
 
@@ -111,12 +111,12 @@ public class Gasto {
         mFecha = fecha;
     }
 
-    public int getCategoria() {
-        return mCategoria;
+    public String getCategoria() {
+        return mIdCategoria;
     }
 
-    public void setCategoria(int categoria) {
-        mCategoria = categoria;
+    public void setCategoria(String categoria) {
+        mIdCategoria = categoria;
     }
 
     public TipoGasto getTipo() {
@@ -127,7 +127,8 @@ public class Gasto {
         mTipo = tipo;
     }
 
-    private static TipoGasto tipoDesdeString(final String tipoStr) {
+    //TODO: Crear utilidad con este metodo.
+    public static TipoGasto tipoDesdeString(final String tipoStr) {
         switch (tipoStr) {
             case "ENTRETENIMIENTO":
                 return TipoGasto.ENTRETENIMIENTO;
@@ -135,6 +136,27 @@ public class Gasto {
                 return TipoGasto.EXTRA;
 
             default: return TipoGasto.NECESARIO;
+        }
+    }
+
+    //TODO: Crear funcion de utilidad para esto.
+    /**
+     * Convierte un número entero entre 0 y 2 en un valor del enum {@link TipoGasto}.
+     *
+     * @param opcion un número entero que represente un valor de {@link TipoGasto}
+     * @return el valor de {@link TipoGasto} correspondiente.
+     * @throws IllegalArgumentException si el número no tiene el valor de ninguno del enum.
+     */
+    public static TipoGasto getTipoDeGasto(int opcion) {
+        switch (opcion) {
+            case 0:
+                return TipoGasto.NECESARIO;
+            case 1:
+                return TipoGasto.ENTRETENIMIENTO;
+            case 2:
+                return TipoGasto.EXTRA;
+            default:
+                throw new IllegalArgumentException();
         }
     }
 }

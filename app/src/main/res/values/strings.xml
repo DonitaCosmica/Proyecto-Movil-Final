@@ -1,5 +1,6 @@
 <resources>
     <string name="app_name">ProyectoMovilFinal</string>
+
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="temporal_cantidad">2489</string>
@@ -11,8 +12,10 @@
     <string name="temporal_edad">29</string>
 
     <!-- Crear y modificar gastos -->
+    <string name="titulo_tipo_gasto">Clasifica tu gasto</string>
     <string name="titulo_nuevo_gasto">Agregar un gasto</string>
     <string name="titulo_editar_gasto">Modificar un gasto</string>
+    <string name="descripcion_agregar_gasto">Escribe la cantidad que gastaste, puedes añadir una breve descripción.</string>
 
     <!-- Comunes -->
     <string name="confirmar">Confirmar</string>
@@ -36,6 +39,9 @@
 
     <string name="bot_nav_inicio">Inicio</string>
 
+    <!-- Subcategorias -->
+    <string name="titulo_subcategorias">¿En qué gastaste?</string>
+
     <!-- Labels bottom nav view -->
     <string name="bot_nav_gastos">Gastos</string>
     <string name="bot_nav_pasos">Pasos</string>
@@ -44,18 +50,18 @@
 
     <!-- Keys de SharedPreferences -->
     <string name="pref_key_password_usuario">PASSWORD_USUARIO</string>
-    <string-array name="tipos_de_gasto">
-        <item>Necesario</item>
-        <item>Entretenimiento</item>
-        <item>Extra</item>
-    </string-array>
+    <string name="btn_iniciar_sesion">Iniciar sesion</string>
 
     <!-- Iniciar sesion-->
-    <string name="btn_iniciar_sesion">Iniciar sesion</string>
     <string name="btn_registrarse">Registrarse</string>
     <string name="text_correo">Ingrese su correo</string>
     <string name="text_contrasena">Ingrese la constraseña</string>
     <string name="text_contrasenaConfirmar">Vuelva a ingresar la contraseña</string>
     <string name="btn_regresar_iniciarSesion">Regresar</string>
+    <string-array name="tipos_de_gasto">
+        <item>Necesario</item>
+        <item>Entretenimiento</item>
+        <item>Extra</item>
+    </string-array>
 
 </resources>

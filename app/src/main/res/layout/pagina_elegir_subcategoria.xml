@@ -16,27 +16,39 @@
         android:paddingBottom="16dp">
 
         <TextView
-            android:id="@+id/titulo_historial_pasos"
+            android:id="@+id/titulo_subcategoria"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:textAppearance="?attr/textAppearanceHeadline2"
-            android:text="@string/hello_blank_fragment"
+            android:text="@string/titulo_subcategorias"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintStart_toStartOf="parent"/>
 
         <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/lista_historial_pasos"
-            android:name="com.example.proyectomovilfinal.paginas.PaginaHistorialGastos"
+            android:id="@+id/lista_subcategorias"
+            android:name="com.example.proyectomovilfinal.paginas.PaginaSeleccionSubcategoria"
             android:layout_width="match_parent"
             android:layout_height="0dp"
             android:layout_marginTop="16dp"
-            app:layoutManager="LinearLayoutManager"
+            app:layoutManager="androidx.recyclerview.widget.GridLayoutManager"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/titulo_historial_pasos"
-            tools:context=".paginas.PaginaHistorialGastos"
-            tools:listitem="@layout/tarjeta_gasto" />
+            app:layout_constraintTop_toBottomOf="@id/titulo_subcategoria"
+            tools:context=".paginas.PaginaSeleccionSubcategoria"
+            tools:listitem="@layout/tarjeta_con_icono" />
+
+        <com.google.android.material.floatingactionbutton.FloatingActionButton
+            android:id="@+id/fab_agregar_subcategoria"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:clickable="true"
+            android:src="@drawable/ic_baseline_add_24"
+            android:layout_marginBottom="16dp"
+            android:layout_marginEnd="16dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"
+            android:focusable="true" />
 
 
     </androidx.constraintlayout.widget.ConstraintLayout>

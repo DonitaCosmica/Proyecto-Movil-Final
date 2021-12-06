@@ -23,9 +23,6 @@ import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.Query;
 
-import java.util.ArrayList;
-import java.util.List;
-
 /**
  * Un fragmento que muestra una lista de gastos.
  */
@@ -33,17 +30,13 @@ public class PaginaHistorialGastos extends Fragment {
 
     private static final String TAG = "HISTORIAL_GASTOS";
 
-    // TODO: Customize parameter argument names
     private static final String ARG_COLUMN_COUNT = "column-count";
-    // TODO: Customize parameters
     private int mColumnCount = 1;
 
     private RecyclerView mRecyclerView;
     private AdapterHistorialGastos mAdapter;
 
     private FirebaseFirestore mFirestore;
-
-    List<Gasto> mGastos = new ArrayList<>();
 
     /**
      * Mandatory empty constructor for the fragment manager to instantiate the
@@ -52,8 +45,6 @@ public class PaginaHistorialGastos extends Fragment {
     public PaginaHistorialGastos()
     {}
 
-    // TODO: Customize parameter initialization
-    @SuppressWarnings("unused")
     public static PaginaHistorialGastos newInstance(int columnCount)
     {
         PaginaHistorialGastos fragment = new PaginaHistorialGastos();
