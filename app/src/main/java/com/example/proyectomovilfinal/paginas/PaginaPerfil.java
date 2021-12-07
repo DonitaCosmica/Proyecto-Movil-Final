@@ -13,6 +13,7 @@ import androidx.fragment.app.Fragment;
 
 import com.example.proyectomovilfinal.PresupuestoDiarioActivity;
 import com.example.proyectomovilfinal.R;
+import com.example.proyectomovilfinal.Util;
 import com.example.proyectomovilfinal.data.DatosUsuario;
 import com.google.firebase.firestore.FirebaseFirestore;
 
@@ -82,6 +83,7 @@ public class PaginaPerfil extends Fragment {
         btnCerrarSesion.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                Util.reiniciarCredenciales(getActivity());
                 Toast.makeText(getActivity(), "Moooo", Toast.LENGTH_SHORT).show();
             }
         });

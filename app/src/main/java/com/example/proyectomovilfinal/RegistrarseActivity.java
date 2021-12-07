@@ -1,9 +1,7 @@
 package com.example.proyectomovilfinal;
 
-import androidx.annotation.NonNull;
-import androidx.appcompat.app.AppCompatActivity;
+import static android.content.ContentValues.TAG;
 
-import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
@@ -12,6 +10,7 @@ import android.widget.EditText;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.app.AppCompatActivity;
 
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
@@ -19,8 +18,6 @@ import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseAuthUserCollisionException;
 import com.google.firebase.auth.FirebaseUser;
-
-import static android.content.ContentValues.TAG;
 
 public class RegistrarseActivity extends AppCompatActivity {
 
@@ -33,10 +30,10 @@ public class RegistrarseActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_registrarse);
-        // [START initialize_auth]
+
         // Initialize Firebase Auth
         mAuth = FirebaseAuth.getInstance();
-        // [END initialize_auth]
+
         text_correo_registrarse = findViewById(R.id.text_correo_registrarse);
         text_contrasena_registrarse = findViewById(R.id.text_contrasena_registrarse);
         text_contrasenaConfirmacion_registrarse = findViewById(R.id.text_contrasenaConfirmacion_registrarse);
@@ -54,11 +51,16 @@ public class RegistrarseActivity extends AppCompatActivity {
     }
 
     public void registrarUsuario(View view) {
-        if (!text_correo_registrarse.getText().toString().isEmpty() && !text_contrasena_registrarse.toString().isEmpty()
-                && !text_contrasenaConfirmacion_registrarse.getText().toString().isEmpty()) {
-            if (text_contrasena_registrarse.getText().toString().equals(text_contrasenaConfirmacion_registrarse.getText().toString())) {
 
-                mAuth.createUserWithEmailAndPassword(text_correo_registrarse.getText().toString().trim(), text_contrasena_registrarse.getText().toString().trim())
+        String correo = text_correo_registrarse.getText().toString();
+        String password = text_contrasena_registrarse.toString();
+        String confPassword = text_contrasenaConfirmacion_registrarse.getText().toString();
+
+        if (!correo.isEmpty() && !password.isEmpty()
+                && !confPassword.isEmpty()) {
+            if (password.equals(confPassword)) {
+
+                mAuth.createUserWithEmailAndPassword(correo.trim(), password.trim())
                         .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
                             @Override
                             public void onComplete(@NonNull Task<AuthResult> task) {
@@ -67,6 +69,9 @@ public class RegistrarseActivity extends AppCompatActivity {
                                      Log.d(TAG, "createUserWithEmail:success");
                                     Toast.makeText(RegistrarseActivity.this, "Usuario creado", Toast.LENGTH_SHORT).show();
                                     FirebaseUser user = mAuth.getCurrentUser();
+
+                                    Util.guardarCredenciales(RegistrarseActivity.this, correo, password);
+
                                     Intent i = new Intent(getApplicationContext(), MainActivity.class);
                                     startActivity(i);
                                     //updateUI(user);

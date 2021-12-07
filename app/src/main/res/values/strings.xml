@@ -50,6 +50,7 @@
     <string name="bot_nav_perfil">Tu Perfil</string>
 
     <!-- Keys de SharedPreferences -->
+    <string name="nombre_archivo_preferencias">preferencias_credenciales</string>
     <string name="pref_key_email_usuario">EMAIL_USUARIO</string>
     <string name="pref_key_password_usuario">PASSWORD_USUARIO</string>
 
