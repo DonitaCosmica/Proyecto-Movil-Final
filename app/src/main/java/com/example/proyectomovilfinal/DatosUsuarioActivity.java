@@ -10,6 +10,7 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.proyectomovilfinal.data.DatosUsuario;
+import com.example.proyectomovilfinal.data.TipoUsuario;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.FirebaseAuth;
@@ -76,7 +77,7 @@ public class DatosUsuarioActivity extends AppCompatActivity {
                 mEmailUsuario,
                 edad,
                 presupuesto,
-                0
+                TipoUsuario.NORMAL
         );
 
         mFirestore.collection(DatosUsuario.NOMBRE_COLECCION_FIRESTORE)

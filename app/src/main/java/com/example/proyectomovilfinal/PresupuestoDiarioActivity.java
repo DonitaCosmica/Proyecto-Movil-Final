@@ -9,6 +9,7 @@ import android.widget.EditText;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.proyectomovilfinal.data.DatosUsuario;
+import com.example.proyectomovilfinal.data.TipoUsuario;
 import com.google.firebase.firestore.FirebaseFirestore;
 
 /**
@@ -46,7 +47,7 @@ public class PresupuestoDiarioActivity extends AppCompatActivity {
                 "juan@su.rancho.com",
                 25,
                 200.0,
-                0
+                TipoUsuario.NORMAL
         );
 
         btnConfirmarPresupuesto.setOnClickListener(new View.OnClickListener() {

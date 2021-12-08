@@ -5,6 +5,8 @@ import android.content.SharedPreferences;
 import android.content.res.Resources;
 import android.util.Log;
 
+import com.example.proyectomovilfinal.data.TipoUsuario;
+
 import java.text.DecimalFormat;
 
 public class Util {
@@ -47,5 +49,20 @@ public class Util {
         editor.apply();
 
         Log.i(TAG, "Credenciales borradas de SharedPreferences.");
+    }
+
+    public static TipoUsuario getTipoFromValor(long valor) {
+
+        int valorEntero = Math.toIntExact(valor);
+
+        switch (valorEntero) {
+            case 1:
+                return TipoUsuario.ANALISTA;
+            case 2:
+                return TipoUsuario.ADMINISTRADOR;
+
+            default:
+                return TipoUsuario.NORMAL;
+        }
     }
 }

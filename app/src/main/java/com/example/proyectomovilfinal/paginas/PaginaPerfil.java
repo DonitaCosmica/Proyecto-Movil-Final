@@ -39,7 +39,7 @@ public class PaginaPerfil extends Fragment {
 
     private FirebaseAuth mAuth;
     private FirebaseFirestore mFirestore;
-    //TODO: Obtener datos del usuario de Firestore.
+
     private DatosUsuario mDatosUsuario;
 
     private TextView mTxtNombre;
