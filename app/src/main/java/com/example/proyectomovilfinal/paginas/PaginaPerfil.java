@@ -128,7 +128,7 @@ public class PaginaPerfil extends Fragment {
 
     private void mostrarPerfil(@NonNull DatosUsuario datosUsuario) {
 
-        String nombreCompleto = datosUsuario.getNombre() + datosUsuario.getApellido();
+        String nombreCompleto = datosUsuario.getNombre() + " " + datosUsuario.getApellido();
         String presupuestoConFormato = "$" + Util.fDinero.format(datosUsuario.getPresupuesto());
 
         mTxtNombre.setText(nombreCompleto);

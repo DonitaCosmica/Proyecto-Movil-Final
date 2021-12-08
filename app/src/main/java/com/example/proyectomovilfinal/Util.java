@@ -15,6 +15,8 @@ public class Util {
 
     public static final DecimalFormat fDinero = new DecimalFormat("0.00");
 
+    public static final double PRESUPUESTO_MAXIMO = 1000000.0;
+
     public static void guardarCredenciales(Context context, String correo, String password) {
 
         Resources res = context.getResources();
