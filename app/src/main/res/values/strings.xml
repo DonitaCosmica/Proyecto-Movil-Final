@@ -22,6 +22,7 @@
 
     <!-- Comunes -->
     <string name="confirmar">Confirmar</string>
+    <string name="continuar">Continuar</string>
     <string name="cancelar">Cancelar</string>
     <string name="cerrar_sesion">Cerrar Sesión</string>
 
@@ -47,6 +48,31 @@
     <string name="hint_agregar_categoria">Snacks</string>
     <string name="dialog_agregar_subcategoria">Crea una nueva subcategoría de gastos.</string>
 
+    <!-- Iniciar sesion-->
+    <string name="titulo_iniciar_sesion">Iniciar Sesión</string>
+    <string name="ir_a_registrarse">¿No tienes una cuenta? Regístrate</string>
+    <string name="ir_a_inicio_sesion">¿Ya tienes una cuenta? Inicia Sesión</string>
+
+    <string name="campo_correo">Correo electrónico</string>
+    <string name="campo_password">Contraseña</string>
+    <string name="campo_password_confirmar">Confirma la contraseña</string>
+
+    <string name="btn_regresar_iniciarSesion">Regresar</string>
+
+    <string name="titulo_registro">Crea una Cuenta</string>
+    <string name="btn_registrar">Registrarse</string>
+
+    <!-- Formulario para datos del usuario -->
+    <string name="titulo_datos_usuario">Cuéntanos Más Sobre Ti</string>
+
+    <string name="hint_campo_nombre">Nombre(s)</string>
+    <string name="hint_campo_apellido">Primer Apellido</string>
+    <string name="hint_campo_edad">Edad, en años</string>
+    <string name="hint_campo_presupuesto">Tu presupuesto diario</string>
+
+    <!-- Errores de validacion -->
+    <string name="err_correo_no_valido">La dirección de correo no es válida.</string>
+
     <!-- Labels bottom nav view -->
     <string name="bot_nav_gastos">Gastos</string>
     <string name="bot_nav_pasos">Pasos</string>
@@ -56,13 +82,5 @@
     <string name="nombre_archivo_preferencias">preferencias_credenciales</string>
     <string name="pref_key_email_usuario">EMAIL_USUARIO</string>
     <string name="pref_key_password_usuario">PASSWORD_USUARIO</string>
-
-    <!-- Iniciar sesion-->
-    <string name="btn_iniciar_sesion">Iniciar sesion</string>
-    <string name="btn_registrarse">Registrarse</string>
-    <string name="text_correo">Ingrese su correo</string>
-    <string name="text_contrasena">Ingrese la constraseña</string>
-    <string name="text_contrasenaConfirmar">Vuelva a ingresar la contraseña</string>
-    <string name="btn_regresar_iniciarSesion">Regresar</string>
 
 </resources>

@@ -5,7 +5,7 @@ import static android.content.ContentValues.TAG;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
-import android.view.View;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
@@ -37,11 +37,20 @@ public class RegistrarseActivity extends AppCompatActivity {
         text_correo_registrarse = findViewById(R.id.text_correo_registrarse);
         text_contrasena_registrarse = findViewById(R.id.text_contrasena_registrarse);
         text_contrasenaConfirmacion_registrarse = findViewById(R.id.text_contrasenaConfirmacion_registrarse);
+
+        Button btnRegistrarse = findViewById(R.id.btn_registrarse_registrarse);
+        btnRegistrarse.setOnClickListener(view -> {
+            registrarUsuario();
+        });
+
+        Button btnIrIniciarSesion = findViewById(R.id.btn_ir_inicio_sesion);
+        btnIrIniciarSesion.setOnClickListener(view -> {
+            irIniciarSesion();
+        });
     }
 
     public void onStart() {
         super.onStart();
-        // Check if user is signed in (non-null) and update UI accordingly.
         FirebaseUser currentUser = mAuth.getCurrentUser();
 
         if(currentUser != null){
@@ -50,10 +59,10 @@ public class RegistrarseActivity extends AppCompatActivity {
         
     }
 
-    public void registrarUsuario(View view) {
+    public void registrarUsuario() {
 
         String correo = text_correo_registrarse.getText().toString();
-        String password = text_contrasena_registrarse.toString();
+        String password = text_contrasena_registrarse.getText().toString();
         String confPassword = text_contrasenaConfirmacion_registrarse.getText().toString();
 
         if (!correo.isEmpty() && !password.isEmpty()
@@ -72,9 +81,9 @@ public class RegistrarseActivity extends AppCompatActivity {
 
                                     Util.guardarCredenciales(RegistrarseActivity.this, correo, password);
 
-                                    Intent i = new Intent(getApplicationContext(), MainActivity.class);
+                                    Intent i = new Intent(RegistrarseActivity.this, DatosUsuarioActivity.class);
                                     startActivity(i);
-                                    //updateUI(user);
+                                    finish();
                                 } else {
                                     if (task.getException() instanceof FirebaseAuthUserCollisionException) {
                                         Toast.makeText(RegistrarseActivity.this, "Ese usuario ya existe", Toast.LENGTH_SHORT).show();
@@ -82,12 +91,8 @@ public class RegistrarseActivity extends AppCompatActivity {
                                         // If sign in fails, display a message to the user.
                                         Log.w(TAG, "createUserWithEmail:failure", task.getException());
                                         Toast.makeText(RegistrarseActivity.this, "Error, verifica los datos", Toast.LENGTH_SHORT).show();
-                                        updateUI(null);
                                     }
                                 }
-                            }
-
-                            private void updateUI(Object o) {
                             }
                         });
             } else {
@@ -98,7 +103,7 @@ public class RegistrarseActivity extends AppCompatActivity {
         }
     }
 
-    public void irIniciarSesion(View view){
+    public void irIniciarSesion(){
         Intent i = new Intent(this, IniciarSesionActivity.class);
         startActivity(i);
     }

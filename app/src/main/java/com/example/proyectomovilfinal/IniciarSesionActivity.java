@@ -3,8 +3,9 @@ package com.example.proyectomovilfinal;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
-import android.view.View;
+import android.widget.Button;
 import android.widget.EditText;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -21,8 +22,9 @@ public class IniciarSesionActivity extends AppCompatActivity {
     private static final String TAG = "IniciarSesionActivity";
 
     private FirebaseAuth mAuth;
-    private EditText text_correo_inicio;
-    private EditText text_contrasena_inicio;
+
+    private EditText mEditTxtCampoCorreo;
+    private EditText mEditTxtCampoPassword;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -31,23 +33,34 @@ public class IniciarSesionActivity extends AppCompatActivity {
         // Initialize Firebase Auth
         mAuth = FirebaseAuth.getInstance();
 
-        text_correo_inicio = findViewById(R.id.text_correo_inicio);
-        text_contrasena_inicio = findViewById(R.id.text_contrasena_inicio);
+        mEditTxtCampoCorreo = findViewById(R.id.edit_login_correo);
+        mEditTxtCampoPassword = findViewById(R.id.edit_login_password);
+
+        Button btnIniciarSesion = findViewById(R.id.btn_iniciar_sesion);
+        btnIniciarSesion.setOnClickListener(view -> {
+            iniciarSesion();
+        });
+
+        TextView txtIrARegsistro = findViewById(R.id.link_ir_a_registrarse);
+        txtIrARegsistro.setOnClickListener(view -> {
+            irARegistro();
+        });
     }
 
     public void onStart() {
         super.onStart();
-        // Check if user is signed in (non-null) and update UI accordingly.
+
         FirebaseUser currentUser = mAuth.getCurrentUser();
+
         if(currentUser != null){
             currentUser.reload();
         }
     }
 
-    public void iniciarSesion(View view){
+    private void iniciarSesion(){
 
-        String correo = text_correo_inicio.getText().toString();
-        String password = text_contrasena_inicio.getText().toString();
+        String correo = mEditTxtCampoCorreo.getText().toString();
+        String password = mEditTxtCampoPassword.getText().toString();
 
         if(!correo.isEmpty() && !password.isEmpty()) {
             mAuth.signInWithEmailAndPassword(correo.trim(), password.trim())
@@ -65,25 +78,20 @@ public class IniciarSesionActivity extends AppCompatActivity {
 
                                 Intent i = new Intent(getApplicationContext(), MainActivity.class);
                                 startActivity(i);
-                                updateUI(user);
 
                             } else {
                                 // If sign in fails, display a message to the user.
                                 Log.w(TAG, "signInWithEmail:failure", task.getException());
                                 Toast.makeText(getApplicationContext(), "Correo o contraseña incorrectos", Toast.LENGTH_SHORT).show();
-                                updateUI(null);
                             }
-                        }
-
-                        private void updateUI(FirebaseUser user) {
                         }
                     });
         }else{
-            Toast.makeText(getApplicationContext(), "Debe completar los campos", Toast.LENGTH_SHORT).show();
+            mEditTxtCampoCorreo.setError(getString(R.string.err_correo_no_valido));
         }
     }
 
-    public void irRegistrarse(View view){
+    private void irARegistro(){
         Intent i = new Intent(this, RegistrarseActivity.class);
         startActivity(i);
     }
