@@ -19,6 +19,7 @@ import androidx.fragment.app.Fragment;
 
 import com.example.proyectomovilfinal.MainActivity;
 import com.example.proyectomovilfinal.R;
+import com.example.proyectomovilfinal.Util;
 import com.example.proyectomovilfinal.data.DatosUsuario;
 import com.example.proyectomovilfinal.data.Gasto;
 import com.google.android.gms.tasks.OnCompleteListener;
@@ -31,7 +32,6 @@ import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
 
-import java.text.DecimalFormat;
 import java.util.Calendar;
 import java.util.Date;
 
@@ -48,8 +48,6 @@ public class FormularioGasto extends Fragment {
     private static final String ID_GASTO = "ID_GASTO";
     private static final String SUBCATEGORIA_GASTO = "SUBCATEGORIA_GASTO";
     private static final String TIPO_GASTO = "TIPO_GASTO";
-
-    private static final DecimalFormat formatoDinero = new DecimalFormat("0.00");
 
     // Argumentos del fragment.
     private String mIdGasto;
@@ -271,7 +269,7 @@ public class FormularioGasto extends Fragment {
         NotificationCompat.Builder builder = new NotificationCompat.Builder(getContext(), getString(R.string.id_canal_notif))
                 .setSmallIcon(R.drawable.ic_launcher_foreground)
                 .setContentTitle(getString(R.string.titulo_notificacion_presupuesto))
-                .setContentText(getString(R.string.contenido_notificacion_presupuesto) + formatoDinero.format(gastoExtra))
+                .setContentText(getString(R.string.contenido_notificacion_presupuesto) + Util.fDinero.format(gastoExtra))
                 .setPriority(NotificationCompat.PRIORITY_DEFAULT)
                 .setContentIntent(pendingIntent)
                 .setAutoCancel(true);

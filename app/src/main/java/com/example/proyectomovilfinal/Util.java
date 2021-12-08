@@ -5,9 +5,13 @@ import android.content.SharedPreferences;
 import android.content.res.Resources;
 import android.util.Log;
 
+import java.text.DecimalFormat;
+
 public class Util {
 
     private static final String TAG = "Util";
+
+    public static final DecimalFormat fDinero = new DecimalFormat("0.00");
 
     public static void guardarCredenciales(Context context, String correo, String password) {
 
