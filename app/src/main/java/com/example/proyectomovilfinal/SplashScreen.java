@@ -38,6 +38,7 @@ public class SplashScreen extends AppCompatActivity {
         } else {
             Intent i = new Intent(SplashScreen.this, IniciarSesionActivity.class);
             startActivity(i);
+            finish();
         }
     }
 
@@ -75,6 +76,8 @@ public class SplashScreen extends AppCompatActivity {
                     Intent i = new Intent(SplashScreen.this, IniciarSesionActivity.class);
                     startActivity(i);
                 }
+
+                finish();
             });
     }
 

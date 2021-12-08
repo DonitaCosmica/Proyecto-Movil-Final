@@ -20,13 +20,19 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_gravity="bottom"
+        app:backgroundTint="@color/blue_gray_900"
         app:fabCradleMargin="8dp"
         app:fabCradleRoundedCornerRadius="16dp">
+
+<!--        app:backgroundTint="@color/teal_200"-->
 
         <com.google.android.material.bottomnavigation.BottomNavigationView
             android:id="@+id/bottom_nav"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
+            app:itemRippleColor="@color/blue_gray_200_60"
+            app:itemIconTint="@color/blue_gray_200"
+            app:itemTextColor="@color/blue_gray_200"
             android:layout_marginEnd="16dp"
             app:menu="@menu/menu_nav_default" />
 

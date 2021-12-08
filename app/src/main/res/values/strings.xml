@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">ProyectoMovilFinal</string>
+    <string name="app_name">Gastos y Pasos</string>
 
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
@@ -10,6 +10,9 @@
     <string name="temporal_nombre_usuario">Juan Ranchero de Vaca</string>
     <string name="temporal_email">juan@rancho.com</string>
     <string name="temporal_edad">29</string>
+
+    <!-- Pantalla de inicio -->
+    <string name="titulo_inicio">Bienvenido</string>
 
     <!-- Crear y modificar gastos -->
     <string name="titulo_tipo_gasto">Clasifica tu gasto</string>
