@@ -23,7 +23,6 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/icono_login"
-        app:layout_constraintBottom_toTopOf="@id/link_ir_a_registrarse"
         android:layout_marginStart="32dp"
         android:layout_marginEnd="32dp"
         android:layout_marginBottom="32dp">
@@ -40,53 +39,67 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="32dp"
-                android:text="@string/titulo_iniciar_sesion"
+                android:text="@string/titulo_datos_usuario"
+                android:textAlignment="center"
+                android:paddingStart="16dp"
+                android:paddingEnd="16dp"
                 android:textAppearance="?attr/textAppearanceHeadline2"/>
 
-
             <EditText
-                android:id="@+id/edit_login_correo"
+                android:id="@+id/edit_datos_nombre"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:ems="10"
-                android:inputType="textEmailAddress"
+                android:inputType="textCapWords"
                 android:layout_marginBottom="16dp"
-                android:hint="@string/campo_correo"
-                android:drawableStart="@drawable/ic_baseline_mail_outline_24"
+                android:hint="@string/hint_campo_nombre"
+                android:drawableStart="@drawable/ic_baseline_person_24"
                 android:drawableTint="@color/blue_gray_200"
                 android:drawablePadding="8dp"/>
 
             <EditText
-                android:id="@+id/edit_login_password"
+                android:id="@+id/edit_datos_apellido"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:ems="10"
-                android:inputType="textPassword"
+                android:inputType="textCapWords"
                 android:layout_marginBottom="16dp"
-                android:hint="@string/campo_password"
-                android:drawableStart="@drawable/ic_baseline_vpn_key_24"
+                android:hint="@string/hint_campo_apellido"
+                android:drawableStart="@drawable/ic_baseline_person_24"
+                android:drawableTint="@color/blue_gray_200"
+                android:drawablePadding="8dp"/>
+
+            <EditText
+                android:id="@+id/edit_datos_edad"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:ems="10"
+                android:inputType="number"
+                android:layout_marginBottom="16dp"
+                android:hint="@string/hint_campo_edad"
+                android:drawableStart="@drawable/ic_baseline_accessibility_new_24"
+                android:drawableTint="@color/blue_gray_200"
+                android:drawablePadding="8dp"/>
+
+            <EditText
+                android:id="@+id/edit_datos_presupuesto"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:ems="10"
+                android:inputType="numberDecimal"
+                android:layout_marginBottom="16dp"
+                android:hint="@string/hint_campo_presupuesto"
+                android:drawableStart="@drawable/ic_baseline_attach_money_24"
                 android:drawableTint="@color/blue_gray_200"
                 android:drawablePadding="8dp"/>
 
             <Button
-                android:id="@+id/btn_iniciar_sesion"
+                android:id="@+id/btn_confirmar_datos_usuario"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="@string/titulo_iniciar_sesion"/>
+                android:text="@string/confirmar"/>
 
         </LinearLayout>
 
     </androidx.cardview.widget.CardView>
-
-    <TextView
-        android:id="@+id/link_ir_a_registrarse"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        android:layout_marginBottom="48dp"
-        android:text="@string/ir_a_registrarse"
-        android:textAppearance="?attr/textAppearanceBody1"/>
-
 </androidx.constraintlayout.widget.ConstraintLayout>

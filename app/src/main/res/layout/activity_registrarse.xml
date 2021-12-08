@@ -4,7 +4,6 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:onClick="registrarUsuario"
     tools:context=".IniciarSesionActivity">
 
     <LinearLayout
@@ -22,7 +21,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:ems="10"
-            android:hint="@string/text_correo"
+            android:hint="@string/campo_correo"
             android:inputType="textPersonName" />
 
         <EditText
@@ -30,7 +29,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:ems="10"
-            android:hint="@string/text_contrasena"
+            android:hint="@string/campo_password"
             android:inputType="textPassword" />
 
         <EditText
@@ -38,21 +37,19 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:ems="10"
-            android:hint="@string/text_contrasenaConfirmar"
+            android:hint="@string/campo_password_confirmar"
             android:inputType="textPassword" />
 
         <Button
             android:id="@+id/btn_registrarse_registrarse"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:onClick="registrarUsuario"
-            android:text="@string/btn_registrarse" />
+            android:text="@string/btn_registrar" />
 
         <Button
-            android:id="@+id/btn_regresar_iniciarSesion"
+            android:id="@+id/btn_ir_inicio_sesion"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:onClick="irIniciarSesion"
-            android:text="@string/btn_regresar_iniciarSesion" />
+            android:text="@string/ir_a_inicio_sesion" />
     </LinearLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>

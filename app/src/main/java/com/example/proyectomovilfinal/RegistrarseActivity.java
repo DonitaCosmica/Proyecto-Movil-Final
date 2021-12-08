@@ -1,17 +1,16 @@
 package com.example.proyectomovilfinal;
 
-import androidx.annotation.NonNull;
-import androidx.appcompat.app.AppCompatActivity;
+import static android.content.ContentValues.TAG;
 
-import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
-import android.view.View;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.app.AppCompatActivity;
 
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
@@ -36,18 +35,27 @@ public class RegistrarseActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_registrarse);
-        // [START initialize_auth]
+
         // Initialize Firebase Auth
         mAuth = FirebaseAuth.getInstance();
-        // [END initialize_auth]
+
         text_correo_registrarse = findViewById(R.id.text_correo_registrarse);
         text_contrasena_registrarse = findViewById(R.id.text_contrasena_registrarse);
         text_contrasenaConfirmacion_registrarse = findViewById(R.id.text_contrasenaConfirmacion_registrarse);
+
+        Button btnRegistrarse = findViewById(R.id.btn_registrarse_registrarse);
+        btnRegistrarse.setOnClickListener(view -> {
+            registrarUsuario();
+        });
+
+        Button btnIrIniciarSesion = findViewById(R.id.btn_ir_inicio_sesion);
+        btnIrIniciarSesion.setOnClickListener(view -> {
+            irIniciarSesion();
+        });
     }
 
     public void onStart() {
         super.onStart();
-        // Check if user is signed in (non-null) and update UI accordingly.
         FirebaseUser currentUser = mAuth.getCurrentUser();
 
         if(currentUser != null){
@@ -56,35 +64,44 @@ public class RegistrarseActivity extends AppCompatActivity {
         
     }
 
-    public void registrarUsuario(View view) {
+    public void registrarUsuario() {
 
+        String correo = text_correo_registrarse.getText().toString();
+        String password = text_contrasena_registrarse.getText().toString();
+        String confPassword = text_contrasenaConfirmacion_registrarse.getText().toString();
 
-        if (!text_correo_registrarse.getText().toString().isEmpty() && !text_contrasena_registrarse.toString().isEmpty()
-                && !text_contrasenaConfirmacion_registrarse.getText().toString().isEmpty()) {
+        if (!correo.isEmpty() && !password.isEmpty() && !confPassword.isEmpty()) {
             Pattern pattern = Pattern.compile("^[_A-Za-z0-9-\\+]+(\\.[_A-Za-z0-9-]+)*@[A-Za-z0-9-]+(\\.[A-Za-z0-9]+)*(\\.[A-Za-z]{2,})$");
-            Matcher mather = pattern.matcher(text_correo_registrarse.getText().toString());
-            boolean correo = mather.matches();
-            if(correo == true){
-            if (text_contrasena_registrarse.length() >= 8 && text_contrasena_registrarse.length() <= 12 &&
-                    text_contrasenaConfirmacion_registrarse.length() >= 8 && text_contrasenaConfirmacion_registrarse.length() <= 12) {
-                if (text_contrasena_registrarse.getText().toString().equals(text_contrasenaConfirmacion_registrarse.getText().toString())) {
-                    //Pattern patron = Pattern.compile(".+[0-9]+.+");
+            Matcher mather = pattern.matcher(correo);
+            boolean correoValido = mather.matches();
+
+            if (correoValido) {
+
+                if (password.length() >= 8 && password.length <= 12) {
+
                     Pattern patron = Pattern.compile("^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d).+$");
-                    Matcher matcher = patron.matcher(text_contrasena_registrarse.getText().toString());
-                    boolean numero = matcher.matches();
-                    if (numero == true) {
-                        mAuth.createUserWithEmailAndPassword(text_correo_registrarse.getText().toString().trim(), text_contrasena_registrarse.getText().toString().trim())
+                    Matcher matcher = patron.matcher(password);
+                    boolean passwordValido = matcher.matches();
+
+                    if (passwordValido) {
+
+                        if (password.equals(confPassword)) {
+
+                            mAuth.createUserWithEmailAndPassword(correo.trim(), password.trim())
                                 .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
                                     @Override
                                     public void onComplete(@NonNull Task<AuthResult> task) {
                                         if (task.isSuccessful()) {
                                             // Sign in success, update UI with the signed-in user's information
-                                            Log.d(TAG, "createUserWithEmail:success");
+                                                Log.d(TAG, "createUserWithEmail:success");
                                             Toast.makeText(RegistrarseActivity.this, "Usuario creado", Toast.LENGTH_SHORT).show();
                                             FirebaseUser user = mAuth.getCurrentUser();
-                                            Intent i = new Intent(getApplicationContext(), MainActivity.class);
+
+                                            Util.guardarCredenciales(RegistrarseActivity.this, correo, password);
+
+                                            Intent i = new Intent(RegistrarseActivity.this, DatosUsuarioActivity.class);
                                             startActivity(i);
-                                            //updateUI(user);
+                                            finish();
                                         } else {
                                             if (task.getException() instanceof FirebaseAuthUserCollisionException) {
                                                 Toast.makeText(RegistrarseActivity.this, "Ese usuario ya existe", Toast.LENGTH_SHORT).show();
@@ -92,32 +109,32 @@ public class RegistrarseActivity extends AppCompatActivity {
                                                 // If sign in fails, display a message to the user.
                                                 Log.w(TAG, "createUserWithEmail:failure", task.getException());
                                                 Toast.makeText(RegistrarseActivity.this, "Error, verifica los datos", Toast.LENGTH_SHORT).show();
-                                                updateUI(null);
                                             }
                                         }
                                     }
-
-                                    private void updateUI(Object o) {
-                                    }
                                 });
+                        } else {
+                            text_contrasenaConfirmacion_registrarse.setError("Las contraseñas no coinciden")
+                        }
                     } else {
-                        Toast.makeText(RegistrarseActivity.this, "La contraseña debe incluir almenos 1 numero", Toast.LENGTH_SHORT).show();
+                        text_contrasena_registrarse.setError("La contraseña debe tener un número y una mayúscula");
                     }
+
                 } else {
-                    Toast.makeText(RegistrarseActivity.this, "Las contraseñas no coinciden", Toast.LENGTH_SHORT).show();
+                    text_contrasena_registrarse.setError("La contraseña debe tener entre 8 y 12 caracteres");
                 }
-            }else {
-                Toast.makeText(RegistrarseActivity.this, "La contraseña debe contener de 8 a 12 caracteres", Toast.LENGTH_SHORT).show();
+
+            } else {
+                text_correo_registrarse.setError("Escribe una dirección de correo válida.");
             }
-            }else {
-                Toast.makeText(RegistrarseActivity.this, "El correo no tiene un formato correcto", Toast.LENGTH_SHORT).show();
-            }
+
+
         }else {
-            Toast.makeText(RegistrarseActivity.this, "Los espacios estan vacios", Toast.LENGTH_SHORT).show();
+            Toast.makeText(RegistrarseActivity.this, "Los campos estan vacios", Toast.LENGTH_SHORT).show();
         }
     }
 
-    public void irIniciarSesion(View view){
+    public void irIniciarSesion(){
         Intent i = new Intent(this, IniciarSesionActivity.class);
         startActivity(i);
     }

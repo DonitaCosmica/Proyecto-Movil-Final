@@ -19,7 +19,7 @@ public class Pasos {
 
     private Pasos() {}
 
-    private Pasos(String idUsuario, Date fecha, int cantidad) {
+    public Pasos(String idUsuario, Date fecha, int cantidad) {
         mIdUsuario = idUsuario;
         mFecha = fecha;
         mCantidad = cantidad;

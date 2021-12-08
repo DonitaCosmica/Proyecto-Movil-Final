@@ -9,6 +9,8 @@ import android.widget.EditText;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.proyectomovilfinal.data.DatosUsuario;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.FirebaseFirestore;
 
 /**
@@ -22,10 +24,11 @@ public class PresupuestoDiarioActivity extends AppCompatActivity {
 
     private static final String TAG = "PresupuestoDiarioActivity";
 
-    private EditText mEditPresupuestoDiario;
+    private FirebaseFirestore mFirestore;
 
     private DatosUsuario mDatosUsuario;
-    private FirebaseFirestore mFirestore;
+
+    private EditText mEditPresupuestoDiario;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -36,24 +39,26 @@ public class PresupuestoDiarioActivity extends AppCompatActivity {
         Button btnConfirmarPresupuesto = findViewById(R.id.btn_confirmar_presupuesto);
         Button btnCancelarPresupuesto = findViewById(R.id.btn_cancelar_presupuesto);
 
+        FirebaseAuth auth = FirebaseAuth.getInstance();
         mFirestore = FirebaseFirestore.getInstance();
 
+        FirebaseUser usuario = auth.getCurrentUser();
 
-        mDatosUsuario = new DatosUsuario(
-                "pXqACrhyoqZpdw8n11n64749YuI2",
-                "Juan",
-                "Ranchero de Vaca",
-                "juan@su.rancho.com",
-                25,
-                200.0,
-                0
-        );
+        if (usuario != null)
+            obtenerPresupuestoDiario(usuario.getUid());
 
         btnConfirmarPresupuesto.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 float presupuesto = Float.parseFloat(mEditPresupuestoDiario.getText().toString());
-                guardarPresupuestoDiario(presupuesto);
+
+                if (presupuesto < 0 || presupuesto > Util.PRESUPUESTO_MAXIMO) {
+                    mEditPresupuestoDiario.setError(getString(R.string.err_presupuesto_fuera_rango));
+
+                } else {
+                    guardarPresupuestoDiario(presupuesto);
+                }
+
                 finish();
             }
         });
@@ -64,6 +69,15 @@ public class PresupuestoDiarioActivity extends AppCompatActivity {
                 finish();
             }
         });
+    }
+
+    private void obtenerPresupuestoDiario(final String idUsuario) {
+        mFirestore.collection(DatosUsuario.NOMBRE_COLECCION_FIRESTORE).document(idUsuario)
+                .get()
+                .addOnSuccessListener(snapshot -> {
+                    mDatosUsuario = DatosUsuario.fromDoc(snapshot);
+                    mEditPresupuestoDiario.setText(String.valueOf(mDatosUsuario.getPresupuesto()));
+                });
     }
 
     private void guardarPresupuestoDiario(float nuevoPresupuesto) {

@@ -2,8 +2,8 @@
     <!-- Base application theme. -->
     <style name="Theme.ProyectoMovilFinal" parent="Theme.MaterialComponents.DayNight">
         <!-- Color primario -->
-        <item name="colorPrimary">@color/purple_200</item>
-        <item name="colorPrimaryVariant">@color/purple_700</item>
+        <item name="colorPrimary">@color/blue_gray_800</item>
+        <item name="colorPrimaryVariant">@color/blue_gray_900</item>
 
         <!-- Color secundario. -->
         <item name="colorSecondary">@color/teal_200</item>
@@ -25,5 +25,7 @@
 
     <style name="SplashScreen" parent="Theme.MaterialComponents.DayNight.NoActionBar">
         <item name="android:windowBackground">@drawable/splash_screen</item>
+        <!-- Status bar color. -->
+        <item name="android:statusBarColor" tools:targetApi="l">@color/blue_gray_900</item>
     </style>
 </resources>

@@ -1,5 +1,6 @@
 package com.example.proyectomovilfinal.data;
 
+import com.example.proyectomovilfinal.Util;
 import com.google.firebase.firestore.DocumentSnapshot;
 
 import java.util.HashMap;
@@ -21,11 +22,11 @@ public class DatosUsuario {
     private String mEmail;
     private int mEdad;
     private double mPresupuesto;
-    private int mTipo;
+    private TipoUsuario mTipo;
 
     private DatosUsuario() {}
 
-    public DatosUsuario(String idUsuario, String nombre, String apellido, String email, int edad, double presupuesto, int tipo) {
+    public DatosUsuario(String idUsuario, String nombre, String apellido, String email, int edad, double presupuesto, TipoUsuario tipo) {
         mIdUsuario = idUsuario;
         mNombre = nombre;
         mApellido = apellido;
@@ -43,7 +44,7 @@ public class DatosUsuario {
         documento.put(CAMPO_EMAIL, mEmail);
         documento.put(CAMPO_EDAD, mEdad);
         documento.put(CAMPO_PRESUPUESTO, mPresupuesto);
-        documento.put(CAMPO_TIPO, mTipo);
+        documento.put(CAMPO_TIPO, mTipo.getValor());
 
         return documento;
     }
@@ -59,7 +60,7 @@ public class DatosUsuario {
             doc.getString(CAMPO_EMAIL),
             Math.toIntExact(doc.getLong(CAMPO_EDAD)),
             doc.getDouble(CAMPO_PRESUPUESTO),
-            Math.toIntExact(doc.getLong(CAMPO_TIPO))
+            Util.getTipoFromValor(doc.getLong(CAMPO_TIPO))
         );
 
         datosUsuario.mIdUsuario = doc.getId();
@@ -68,7 +69,6 @@ public class DatosUsuario {
     }
 
     //region Get/Set
-
     public String getIdUsuario() {
         return mIdUsuario;
     }
@@ -114,11 +114,11 @@ public class DatosUsuario {
     }
 
     public int getTipo() {
-        return mTipo;
+        return mTipo.getValor();
     }
 
     public void setTipo(int tipo) {
-        mTipo = tipo;
+        mTipo = Util.getTipoFromValor(tipo);
     }
 
     //endregion
