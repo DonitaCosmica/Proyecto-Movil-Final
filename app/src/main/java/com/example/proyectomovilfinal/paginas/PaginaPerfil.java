@@ -13,6 +13,8 @@ import androidx.fragment.app.Fragment;
 
 import com.example.proyectomovilfinal.PresupuestoDiarioActivity;
 import com.example.proyectomovilfinal.R;
+import com.example.proyectomovilfinal.data.DatosUsuario;
+import com.google.firebase.firestore.FirebaseFirestore;
 
 /**
  * Una subclase de {@link Fragment} que muestra la informacion
@@ -21,6 +23,18 @@ import com.example.proyectomovilfinal.R;
  * usado para crear nuevas instancias de este fragmento.
  */
 public class PaginaPerfil extends Fragment {
+
+    private FirebaseFirestore mFirestore;
+    //TODO: Obtener datos del usuario de Firestore.
+    DatosUsuario mDatosUsuario = new DatosUsuario(
+            "pXqACrhyoqZpdw8n11n64749YuI2",
+            "Juan",
+            "Ranchero de Vaca",
+            "juan@su.rancho.com",
+            25,
+            200.0,
+            0
+    );
 
     public PaginaPerfil() {
         // Constructor publico default requerido.
@@ -45,6 +59,8 @@ public class PaginaPerfil extends Fragment {
         if (getArguments() != null) {
             //Obtener argumentos del Bundle, si los hay
         }
+
+        mFirestore = FirebaseFirestore.getInstance();
     }
 
     @Override

@@ -8,6 +8,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 
 import com.example.proyectomovilfinal.paginas.FormularioGasto;
+import com.example.proyectomovilfinal.paginas.PaginaTipoGasto;
 
 public class AgregarGastoActivity extends AppCompatActivity {
 
@@ -19,17 +20,24 @@ public class AgregarGastoActivity extends AppCompatActivity {
         setContentView(R.layout.activity_agregar_gasto);
 
         ActionBar actionBar = getSupportActionBar();
-        actionBar.setDisplayHomeAsUpEnabled(true);
+
+        if (actionBar != null) {
+            actionBar.setDisplayHomeAsUpEnabled(true);
+        }
 
         Intent i = getIntent();
         String idGasto = i.getStringExtra(ID_GASTO);
 
-        Fragment fragmentoFormulario = FormularioGasto.newInstance(idGasto);
+        Fragment formularioGasto = PaginaTipoGasto.newInstance();
+
+        if (idGasto != null && !idGasto.isEmpty()) {
+            formularioGasto = FormularioGasto.newInstance(idGasto, 0, "");
+        }
 
         if(savedInstanceState == null && findViewById(R.id.fragment_agregar_gasto) != null) {
             getSupportFragmentManager().beginTransaction()
                     .setReorderingAllowed(true)
-                    .add(R.id.fragment_agregar_gasto, fragmentoFormulario, null)
+                    .add(R.id.fragment_agregar_gasto, formularioGasto, null)
                     .commit();
         }
     }
