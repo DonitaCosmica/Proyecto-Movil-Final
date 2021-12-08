@@ -17,9 +17,11 @@ import com.firebase.ui.firestore.FirestoreRecyclerAdapter;
 import com.firebase.ui.firestore.FirestoreRecyclerOptions;
 import com.google.firebase.firestore.DocumentSnapshot;
 
+import java.text.DateFormat;
+import java.util.Locale;
+
 /**
  * {@link RecyclerView.Adapter} that can display a {@link DummyItem}.
- * TODO: Reemplazar la implementacion para usar nuestro propio tipo de dato.
  */
 public class AdapterHistorialGastos extends FirestoreRecyclerAdapter<Gasto, AdapterHistorialGastos.ViewHolder> {
 
@@ -44,7 +46,7 @@ public class AdapterHistorialGastos extends FirestoreRecyclerAdapter<Gasto, Adap
     @Override
     public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(parent.getContext())
-                    .inflate(R.layout.tarjeta_con_icono, parent, false);
+                    .inflate(R.layout.tarjeta_gasto, parent, false);
         return new ViewHolder(view);
     }
 
@@ -59,6 +61,8 @@ public class AdapterHistorialGastos extends FirestoreRecyclerAdapter<Gasto, Adap
         private TextView mSubtituloTarjeta;
         private TextView mTextoFinalTarjeta;
         private ImageView mIconoTarjeta;
+
+        DateFormat mFormatoFecha = DateFormat.getDateTimeInstance(DateFormat.SHORT, DateFormat.SHORT, Locale.getDefault());
 
         public ViewHolder(View view) {
             super(view);
@@ -82,8 +86,10 @@ public class AdapterHistorialGastos extends FirestoreRecyclerAdapter<Gasto, Adap
 
             Resources res = itemView.getResources();
 
+            String fechaConFormato = mFormatoFecha.format(gasto.getFecha());
+
             mTituloTarjeta.setText(gasto.getDescripcion());
-            mSubtituloTarjeta.setText(gasto.getFecha().toString());
+            mSubtituloTarjeta.setText(fechaConFormato);
             mTextoFinalTarjeta.setText("$" + gasto.getCantidad());
 //            mIconoTarjeta.setImageResource(res.getDrawable(R.drawable.ic_baseline_check_24, ));
         }

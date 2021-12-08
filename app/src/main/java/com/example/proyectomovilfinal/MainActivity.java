@@ -11,9 +11,7 @@ import androidx.navigation.ui.NavigationUI;
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
-import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.auth.FirebaseAuthSettings;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -33,12 +31,15 @@ public class MainActivity extends AppCompatActivity {
         
         // Navegacion con barra inferior.
         BottomNavigationView navView = findViewById(R.id.bottom_nav);
+        navView.setBackground(null);
+        navView.getMenu().getItem(2).setEnabled(false);
 
+        //TODO: Cambiar los fragmentos y el nav graph de la barra segun el tipo de usuario.
         AppBarConfiguration configAppBar = new AppBarConfiguration.Builder(
-                VISTA_INICIO,
-                VISTA_HISTORIAL_GASTOS,
-                VISTA_HISTORIAL_PASOS,
-                VISTA_PERFIL
+            VISTA_INICIO,
+            VISTA_HISTORIAL_GASTOS,
+            VISTA_HISTORIAL_PASOS,
+            VISTA_PERFIL
         ).build();
 
         NavController controladorNav = Navigation.findNavController(this, R.id.fragmento_navegacion);

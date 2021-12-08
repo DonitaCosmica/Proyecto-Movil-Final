@@ -16,28 +16,27 @@
         android:paddingBottom="16dp">
 
         <TextView
-            android:id="@+id/titulo_historial_pasos"
+            android:id="@+id/titulo_tipo_gasto"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:textAppearance="?attr/textAppearanceHeadline2"
-            android:text="@string/hello_blank_fragment"
+            android:text="@string/titulo_tipo_gasto"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintStart_toStartOf="parent"/>
 
         <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/lista_historial_pasos"
-            android:name="com.example.proyectomovilfinal.paginas.PaginaHistorialGastos"
+            android:id="@+id/lista_tipos_gasto"
+            android:name="com.example.proyectomovilfinal.paginas.PaginaTipoGasto"
             android:layout_width="match_parent"
             android:layout_height="0dp"
             android:layout_marginTop="16dp"
-            app:layoutManager="LinearLayoutManager"
+            app:layoutManager="androidx.recyclerview.widget.GridLayoutManager"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/titulo_historial_pasos"
-            tools:context=".paginas.PaginaHistorialGastos"
-            tools:listitem="@layout/tarjeta_gasto" />
-
+            app:layout_constraintTop_toBottomOf="@id/titulo_tipo_gasto"
+            tools:context=".paginas.PaginaTipoGasto"
+            tools:listitem="@layout/tarjeta_con_icono" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </FrameLayout>

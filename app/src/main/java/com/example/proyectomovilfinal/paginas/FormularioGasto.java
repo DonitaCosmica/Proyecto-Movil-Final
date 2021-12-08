@@ -7,7 +7,6 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.TextView;
@@ -20,16 +19,21 @@ import androidx.fragment.app.Fragment;
 
 import com.example.proyectomovilfinal.MainActivity;
 import com.example.proyectomovilfinal.R;
+import com.example.proyectomovilfinal.data.DatosUsuario;
 import com.example.proyectomovilfinal.data.Gasto;
-import com.example.proyectomovilfinal.data.TipoGasto;
+import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.gms.tasks.Task;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.firebase.firestore.DocumentReference;
-import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.QueryDocumentSnapshot;
+import com.google.firebase.firestore.QuerySnapshot;
 
 import java.text.DecimalFormat;
+import java.util.Calendar;
+import java.util.Date;
 
 /**
  * Una subclase de {@link Fragment} que crea y modifica gastos usando
@@ -42,21 +46,28 @@ public class FormularioGasto extends Fragment {
     private static final String TAG = "Formulario Gasto";
 
     private static final String ID_GASTO = "ID_GASTO";
+    private static final String SUBCATEGORIA_GASTO = "SUBCATEGORIA_GASTO";
+    private static final String TIPO_GASTO = "TIPO_GASTO";
+
     private static final DecimalFormat formatoDinero = new DecimalFormat("0.00");
 
+    // Argumentos del fragment.
     private String mIdGasto;
+    private int mTipoDeGasto;
+    private String mIdCategoria;
 
     // Vistas del formulario.
     private Spinner mSpinnerTipo;
     private EditText mEditCantidad;
     private EditText mEditDescripcion;
 
-    //TODO: Usar el id y presupuesto diario reales del usuario para crear gasto.
+    //TODO: Usar el id real del usuario para crear gasto.
     private final String ID_USUARIO_FAKE = "pXqACrhyoqZpdw8n11n64749YuI2";
 
     private Gasto mGasto;
     private boolean mNuevoGasto = true;
     private double mPresupuestoDiario;
+    private double mGastoTotalDia;
 
     private FirebaseFirestore mFirestore;
 
@@ -71,10 +82,14 @@ public class FormularioGasto extends Fragment {
      * @param idGasto El id del gasto, para editar.
      * @return Una nueva instancia de FormularioGasto.
      */
-    public static FormularioGasto newInstance(String idGasto) {
+    public static FormularioGasto newInstance(String idGasto, int tipoDeGasto, String subcategoria) {
         FormularioGasto fragment = new FormularioGasto();
         Bundle args = new Bundle();
+
         args.putString(ID_GASTO, idGasto);
+        args.putInt(TIPO_GASTO, tipoDeGasto);
+        args.putString(SUBCATEGORIA_GASTO, subcategoria);
+
         fragment.setArguments(args);
         return fragment;
     }
@@ -86,6 +101,8 @@ public class FormularioGasto extends Fragment {
         // Obtiene el id del gasto de los argumentos recibidos.
         if (getArguments() != null) {
             mIdGasto = getArguments().getString(ID_GASTO);
+            mTipoDeGasto = getArguments().getInt(TIPO_GASTO);
+            mIdCategoria = getArguments().getString(SUBCATEGORIA_GASTO);
         }
 
         mFirestore = FirebaseFirestore.getInstance();
@@ -99,6 +116,7 @@ public class FormularioGasto extends Fragment {
 
         // Obtener presupuesto diario.
         getPresupuestoDiario(ID_USUARIO_FAKE);
+        getGastoTotal();
     }
 
     @Override
@@ -107,15 +125,6 @@ public class FormularioGasto extends Fragment {
     {
         // Infla el layout para el fragmento.
         View view = inflater.inflate(R.layout.fragment_datos_gasto, container, false);
-
-        // Configura el spinner de tipo de gasto usando un array de strings en recursos.
-        mSpinnerTipo = view.findViewById(R.id.spinner_tipo_gasto);
-        ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(getActivity(),
-                R.array.tipos_de_gasto, android.R.layout.simple_spinner_item);
-
-        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-
-        mSpinnerTipo.setAdapter(adapter);
 
         // Bind de los campos del formulario
         mEditCantidad = view.findViewById(R.id.txt_edit_cantidad_gasto);
@@ -146,29 +155,58 @@ public class FormularioGasto extends Fragment {
 
     private void getGastoDeFirestore(final String idGasto) {
         mFirestore.collection(Gasto.NOMBRE_COLECCION_FIRESTORE).document(idGasto)
-                .get()
-                .addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
-                    @Override
-                    public void onSuccess(DocumentSnapshot snapshot) {
-                        mGasto = Gasto.fromDoc(snapshot);
+            .get()
+            .addOnSuccessListener(snapshot -> {
+                mGasto = Gasto.fromDoc(snapshot);
 
-                        mEditCantidad.setText(String.valueOf(mGasto.getCantidad()));
-                        mEditDescripcion.setText(mGasto.getDescripcion());
-                        mSpinnerTipo.setSelection(mGasto.getTipo().getValor());
-                    }
-                });
+                mEditCantidad.setText(String.valueOf(mGasto.getCantidad()));
+                mEditDescripcion.setText(mGasto.getDescripcion());
+                mSpinnerTipo.setSelection(mGasto.getTipo().getValor());
+            });
     }
 
     private void getPresupuestoDiario(final String idUsuario) {
         mFirestore.collection("usuarios").document(idUsuario)
                 .get()
-                .addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
-                    @Override
-                    public void onSuccess(DocumentSnapshot snapshot) {
-//                        Usuario datosUsuario = Usuario.fromDoc(snapshot);
+                .addOnSuccessListener(snapshot -> {
+                    DatosUsuario datosUsuario = DatosUsuario.fromDoc(snapshot);
 
-//                        mPresupuestoDiario = datosUsuario.presupuesto;
-                        mPresupuestoDiario = 500.0f;
+                    mPresupuestoDiario = datosUsuario.getPresupuesto();
+                });
+    }
+
+    private void getGastoTotal() {
+        Calendar hoy = Calendar.getInstance();
+        hoy.set(Calendar.HOUR, 0);
+        hoy.set(Calendar.MINUTE, 0);
+        hoy.set(Calendar.SECOND, 0);
+        hoy.set(Calendar.MILLISECOND, 0);
+        Date fechaActual = hoy.getTime();
+
+        mFirestore.collection(Gasto.NOMBRE_COLECCION_FIRESTORE)
+                .whereEqualTo(Gasto.CAMPO_ID_USUARIO, ID_USUARIO_FAKE)
+                .whereGreaterThanOrEqualTo(Gasto.CAMPO_FECHA, fechaActual)
+                .get()
+                .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+
+                    @Override
+                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                        if (task.isSuccessful() && task.getResult() != null)
+                        {
+                            double gastoTotal = 0;
+
+                            for (QueryDocumentSnapshot doc : task.getResult())
+                            {
+                                if (doc.getDouble(Gasto.CAMPO_CANTIDAD) != null) {
+                                    gastoTotal += doc.getDouble(Gasto.CAMPO_CANTIDAD);
+                                }
+                            }
+
+                            mGastoTotalDia = gastoTotal;
+
+                        } else {
+                            Log.d(TAG, "Error obteniendo documentos");
+                        }
                     }
                 });
     }
@@ -180,18 +218,17 @@ public class FormularioGasto extends Fragment {
 
         final double cantidad = Double.parseDouble(mEditCantidad.getText().toString());
         final String descripcion = mEditDescripcion.getText().toString();
-        final int CATEGORIA_SNACKS = 0;
-        final TipoGasto tipo = getTipoDeGasto(mSpinnerTipo.getSelectedItemPosition());
 
         if (cantidad < 0) return;
 
-        //TODO: Calcular el gasto total del dia.
-        if (cantidad > mPresupuestoDiario) {
-            enviarNotificacionDePresupuesto(cantidad - mPresupuestoDiario);
+        mGastoTotalDia += cantidad;
+
+        if (mGastoTotalDia > mPresupuestoDiario) {
+            enviarNotificacionDePresupuesto(mGastoTotalDia - mPresupuestoDiario);
         }
 
         if (mNuevoGasto) {
-            mGasto = new Gasto(ID_USUARIO_FAKE, cantidad, tipo, CATEGORIA_SNACKS, descripcion);
+            mGasto = new Gasto(ID_USUARIO_FAKE, cantidad, Gasto.getTipoDeGasto(mTipoDeGasto), mIdCategoria, descripcion);
 
             //TODO: Hacer mas obvio cuando hay un error en la creacion del documento en Firestore.
             mFirestore.collection(Gasto.NOMBRE_COLECCION_FIRESTORE)
@@ -210,9 +247,9 @@ public class FormularioGasto extends Fragment {
                     });
         }
         else {
-            mGasto.setTipo(tipo);
+            mGasto.setTipo(Gasto.getTipoDeGasto(mTipoDeGasto));
             mGasto.setCantidad(cantidad);
-            mGasto.setCategoria(CATEGORIA_SNACKS);
+            mGasto.setCategoria(mIdCategoria);
             mGasto.setDescripcion(descripcion);
 
             mFirestore.collection(Gasto.NOMBRE_COLECCION_FIRESTORE)
@@ -245,25 +282,5 @@ public class FormularioGasto extends Fragment {
         notificationManager.notify(idNotificacion, builder.build());
 
         Log.i(TAG, "Notificacion enviada");
-    }
-
-    /**
-     * Convierte un número entero entre 0 y 2 en un valor del enum {@link TipoGasto}.
-     *
-     * @param opcion un número entero que represente un valor de {@link TipoGasto}
-     * @return el valor de {@link TipoGasto} correspondiente.
-     * @throws IllegalArgumentException si el número no tiene el valor de ninguno del enum.
-     */
-    private TipoGasto getTipoDeGasto(int opcion) {
-        switch (opcion) {
-            case 0:
-                return TipoGasto.NECESARIO;
-            case 1:
-                return TipoGasto.ENTRETENIMIENTO;
-            case 2:
-                return TipoGasto.EXTRA;
-            default:
-                throw new IllegalArgumentException();
-        }
     }
 }

@@ -29,7 +29,7 @@ public class AdapterHistorialPasos extends RecyclerView.Adapter<AdapterHistorial
     public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType)
     {
         View view = LayoutInflater.from(parent.getContext())
-                .inflate(R.layout.tarjeta_con_icono, parent, false);
+                .inflate(R.layout.tarjeta_gasto, parent, false);
         return new ViewHolder(view);
     }
 

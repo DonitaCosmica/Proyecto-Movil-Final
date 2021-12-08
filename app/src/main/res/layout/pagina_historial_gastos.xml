@@ -36,7 +36,7 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/titulo_historial"
             tools:context=".paginas.PaginaHistorialGastos"
-            tools:listitem="@layout/tarjeta_con_icono" />
+            tools:listitem="@layout/tarjeta_gasto" />
 
 
     </androidx.constraintlayout.widget.ConstraintLayout>
