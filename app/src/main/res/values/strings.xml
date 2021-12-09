@@ -22,11 +22,16 @@
     <string name="descripcion_agregar_gasto">Escribe la cantidad que gastaste, puedes añadir una breve descripción.</string>
     <string name="gasto_agregado">Gasto agregado</string>
 
+    <!-- Pasos -->
+    <string name="titulo_historial_pasos">Historial de Pasos</string>
+    <string name="pasos_totales_dia">Total de pasos de hoy</string>
+
     <!-- Comunes -->
     <string name="confirmar">Confirmar</string>
     <string name="continuar">Continuar</string>
     <string name="cancelar">Cancelar</string>
     <string name="cerrar_sesion">Cerrar Sesión</string>
+    <string name="cero">0</string>
 
     <!-- Notificaciones -->
     <string name="id_canal_notif">canal_recordatorios</string>

@@ -22,7 +22,7 @@ import com.firebase.ui.firestore.FirestoreRecyclerOptions;
 import com.google.firebase.firestore.DocumentSnapshot;
 
 /**
- * {@link RecyclerView.Adapter} that can display a {@link DummyItem}.
+ * {@link RecyclerView.Adapter} que muestra una lista de {@link Gasto}.
  */
 public class AdapterHistorialGastos extends FirestoreRecyclerAdapter<Gasto, AdapterHistorialGastos.ViewHolder> {
 
@@ -86,8 +86,8 @@ public class AdapterHistorialGastos extends FirestoreRecyclerAdapter<Gasto, Adap
 
             Resources res = itemView.getResources();
 
-            String fechaConFormato = Util.fFecha.format(gasto.getFecha());
-            String cantidadConFormato = "$" + Util.fDinero.format(gasto.getCantidad());
+            String fechaConFormato = Util.fFechaHora.format(gasto.getFecha());
+            String cantidadConFormato = Util.fDinero.format(gasto.getCantidad());
 
             mTituloTarjeta.setText("Subcategoria");
             mSubtituloTarjeta.setText(fechaConFormato);

@@ -18,9 +18,11 @@ public class Util {
 
     private static final String TAG = "Util";
 
-    public static final DecimalFormat fDinero = new DecimalFormat("0.00");
+    public static final DecimalFormat fDinero = new DecimalFormat("$###,###.00");
+    public static final DecimalFormat fCantidad = new DecimalFormat("###,###,###");
 
-    public static DateFormat fFecha = DateFormat.getDateTimeInstance(DateFormat.MEDIUM, DateFormat.SHORT, Locale.getDefault());
+    public static DateFormat fFechaHora = DateFormat.getDateTimeInstance(DateFormat.MEDIUM, DateFormat.SHORT, Locale.getDefault());
+    public static DateFormat fFecha = DateFormat.getDateInstance(DateFormat.MEDIUM, Locale.getDefault());
 
     public static final double PRESUPUESTO_MAXIMO = 1000000.0;
 

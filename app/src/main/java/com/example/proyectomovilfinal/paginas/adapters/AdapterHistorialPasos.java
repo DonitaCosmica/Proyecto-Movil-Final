@@ -1,71 +1,88 @@
 package com.example.proyectomovilfinal.paginas.adapters;
 
-import android.util.Log;
+import android.graphics.drawable.Drawable;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
 
+import androidx.annotation.NonNull;
+import androidx.appcompat.content.res.AppCompatResources;
+import androidx.core.content.ContextCompat;
+import androidx.core.graphics.drawable.DrawableCompat;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.proyectomovilfinal.R;
-
-import java.util.List;
+import com.example.proyectomovilfinal.Util;
+import com.example.proyectomovilfinal.data.Pasos;
+import com.firebase.ui.firestore.FirestoreRecyclerAdapter;
+import com.firebase.ui.firestore.FirestoreRecyclerOptions;
 
 /**
- * {@link RecyclerView.Adapter} that can display a {@link String}.
- * TODO: Reemplazar la implementacion para usar nuestro propio tipo de dato.
+ * {@link RecyclerView.Adapter} que muestra una lista de {@link Pasos}.
  */
-public class AdapterHistorialPasos extends RecyclerView.Adapter<AdapterHistorialPasos.ViewHolder> {
+public class AdapterHistorialPasos extends FirestoreRecyclerAdapter<Pasos, AdapterHistorialPasos.ViewHolder> {
 
-    private final List<String> mValues;
-
-    public AdapterHistorialPasos(List<String> items) {
-        mValues = items;
+    /**
+     * Crear un nuevo RecyclerView que escucha a un Query de Firestore.  Vea {@link
+     * FirestoreRecyclerOptions} para opciones de configuracion.
+     *
+     * @param options
+     */
+    public AdapterHistorialPasos(@NonNull FirestoreRecyclerOptions<Pasos> options) {
+        super(options);
     }
 
     @Override
-    public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType)
-    {
+    protected void onBindViewHolder(@NonNull ViewHolder holder, int position, @NonNull Pasos pasos) {
+        holder.bind(pasos);
+    }
+
+    @NonNull
+    @Override
+    public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(parent.getContext())
-                .inflate(R.layout.tarjeta_gasto, parent, false);
+                .inflate(R.layout.tarjeta_pasos, parent, false);
         return new ViewHolder(view);
-    }
-
-    @Override
-    public void onBindViewHolder(final ViewHolder holder, int position)
-    {
-//        holder.mItem = mValues.get(position);
-//
-//        holder.mNumeroTarjeta.setText(mValues.get(position).id);
-//        holder.mTituloTarjeta.setText(mValues.get(position).content);
-    }
-
-    @Override
-    public int getItemCount() {
-        return mValues.size();
     }
 
     public static class ViewHolder extends RecyclerView.ViewHolder
     {
-        public final View mView;
-        public TextView mTituloTarjeta;
-        public TextView mNumeroTarjeta;
-//        public DummyItem mItem;
+        private final TextView mTituloTarjeta;
+        private final TextView mTextoFinalTarjeta;
+        private final ImageView mIconoTarjeta;
 
-        public ViewHolder(View view)
-        {
+        public ViewHolder(View view) {
             super(view);
-            mView = view;
-            Log.i("AdapterHistorial", String.valueOf(view == null));
-            mTituloTarjeta = (TextView) view.findViewById(R.id.titulo_tarjeta);
-            mNumeroTarjeta = (TextView) view.findViewById(R.id.texto_final_tarjeta);
+
+            mTituloTarjeta = view.findViewById(R.id.titulo_tarjeta);
+            mTextoFinalTarjeta = view.findViewById(R.id.texto_final_tarjeta);
+            mIconoTarjeta = view.findViewById(R.id.icono_tarjeta);
         }
 
-        @Override
-        public String toString()
-        {
-            return super.toString() + " '" + mTituloTarjeta.getText() + "'";
+        public void bind(final Pasos pasos) {
+
+            int colorTxtContenido = ContextCompat.getColor(itemView.getContext(), R.color.blue_gray_50);
+
+            String fechaConFormato = Util.fFecha.format(pasos.getFecha());
+            String cantidadPasos = Util.fCantidad.format(pasos.getCantidad());
+
+            mTituloTarjeta.setText(fechaConFormato);
+            mTextoFinalTarjeta.setText(cantidadPasos);
+
+            mTituloTarjeta.setTextColor(colorTxtContenido);
+            mTextoFinalTarjeta.setTextColor(colorTxtContenido);
+
+            Drawable unwrappedDrawable = AppCompatResources.getDrawable(itemView.getContext(), R.drawable.ic_baseline_accessibility_new_24);
+
+            if (unwrappedDrawable != null) {
+                Drawable wrappedDrawable = DrawableCompat.wrap(unwrappedDrawable);
+
+                DrawableCompat.setTint(wrappedDrawable, colorTxtContenido);
+                mIconoTarjeta.setImageDrawable(wrappedDrawable);
+            }
+
         }
     }
 }
