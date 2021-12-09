@@ -87,6 +87,8 @@ public class IniciarSesionActivity extends AppCompatActivity {
                                         if (task.isSuccessful()) {
                                             FirebaseUser user = mAuth.getCurrentUser();
 
+                                            Util.guardarCredenciales(IniciarSesionActivity.this, correo, password);
+
                                             Toast.makeText(getApplicationContext(), "iniciando sesion.", Toast.LENGTH_SHORT).show();
 
                                             final Intent i = new Intent(getApplicationContext(), MainActivity.class);

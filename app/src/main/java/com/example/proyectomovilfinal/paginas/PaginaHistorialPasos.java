@@ -12,8 +12,6 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.proyectomovilfinal.R;
-import com.example.proyectomovilfinal.data.DummyContent;
-import com.example.proyectomovilfinal.paginas.adapters.AdapterHistorialPasos;
 
 /**
  * A fragment representing a list of Items.
@@ -74,7 +72,7 @@ public class PaginaHistorialPasos extends Fragment {
             {
                 recyclerView.setLayoutManager(new GridLayoutManager(context, mColumnCount));
             }
-            recyclerView.setAdapter(new AdapterHistorialPasos(DummyContent.ITEMS));
+//            recyclerView.setAdapter(new AdapterHistorialPasos(DummyContent.ITEMS));
         }
 
         return view;

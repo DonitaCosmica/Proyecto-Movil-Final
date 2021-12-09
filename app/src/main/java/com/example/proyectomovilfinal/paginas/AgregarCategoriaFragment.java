@@ -13,7 +13,7 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.DialogFragment;
 
 import com.example.proyectomovilfinal.R;
-import com.example.proyectomovilfinal.data.Gasto;
+import com.example.proyectomovilfinal.Util;
 import com.example.proyectomovilfinal.data.Subcategoria;
 import com.example.proyectomovilfinal.data.TipoGasto;
 import com.google.android.gms.tasks.OnSuccessListener;
@@ -27,12 +27,9 @@ public class AgregarCategoriaFragment extends DialogFragment {
 
     private static final String TAG = "AgregarCategoriaFragment";
 
-    private static final String TIPO_CATEGORIA = "TIPO_DE_CATEGORIA";
-
-    //TODO: Usar el id real del usuario para crear gasto.
-    private final String ID_USUARIO_FAKE = "pXqACrhyoqZpdw8n11n64749YuI2";
-
     private EditText mEditNombreCategoria;
+
+    private String mIdUsuario;
     private TipoGasto mTipoGasto;
 
     private FirebaseFirestore mFirestore;
@@ -45,10 +42,11 @@ public class AgregarCategoriaFragment extends DialogFragment {
      *
      * @return A new instance of fragment AgregarCategoriaFragment.
      */
-    public static AgregarCategoriaFragment newInstance(int tipoDeSubcategoria) {
+    public static AgregarCategoriaFragment newInstance(String idUsuario, int tipoDeSubcategoria) {
         AgregarCategoriaFragment fragment = new AgregarCategoriaFragment();
         Bundle args = new Bundle();
-        args.putInt(TIPO_CATEGORIA, tipoDeSubcategoria);
+        args.putString(Util.KEY_ARG_ID_USUARIO, idUsuario);
+        args.putInt(Util.TIPO_CATEGORIA, tipoDeSubcategoria);
         fragment.setArguments(args);
         return fragment;
     }
@@ -63,7 +61,8 @@ public class AgregarCategoriaFragment extends DialogFragment {
 
         // Obtiene el id del gasto de los argumentos recibidos.
         if (getArguments() != null) {
-            mTipoGasto = Gasto.getTipoDeGasto(getArguments().getInt(TIPO_CATEGORIA));
+            mIdUsuario = getArguments().getString(Util.KEY_ARG_ID_USUARIO);
+            mTipoGasto = Util.getTipoDeGasto(getArguments().getInt(Util.TIPO_CATEGORIA));
         }
 
         mFirestore = FirebaseFirestore.getInstance();
@@ -83,9 +82,21 @@ public class AgregarCategoriaFragment extends DialogFragment {
 
     private void agregarCategoriaEnFirestore() {
 
+        String nombreSubcategoria = mEditNombreCategoria.getText().toString();
+
+        if (nombreSubcategoria.length() <= 0) {
+            mEditNombreCategoria.setError(getString(R.string.err_subcategoria_vacia));
+            return;
+        }
+
+        if (nombreSubcategoria.length() > 40) {
+            mEditNombreCategoria.setError(getString(R.string.err_subcategoria_extensa));
+            return;
+        }
+
         Subcategoria nuevaCategoria = new Subcategoria(
-            ID_USUARIO_FAKE,
-            mEditNombreCategoria.getText().toString(),
+            mIdUsuario,
+            nombreSubcategoria,
             mTipoGasto
         );
 

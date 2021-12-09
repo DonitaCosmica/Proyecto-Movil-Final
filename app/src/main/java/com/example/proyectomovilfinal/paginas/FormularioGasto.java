@@ -1,6 +1,7 @@
 package com.example.proyectomovilfinal.paginas;
 
 import android.app.PendingIntent;
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
@@ -8,11 +9,9 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
-import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import androidx.annotation.NonNull;
 import androidx.core.app.NotificationCompat;
 import androidx.core.app.NotificationManagerCompat;
 import androidx.fragment.app.Fragment;
@@ -22,15 +21,10 @@ import com.example.proyectomovilfinal.R;
 import com.example.proyectomovilfinal.Util;
 import com.example.proyectomovilfinal.data.DatosUsuario;
 import com.example.proyectomovilfinal.data.Gasto;
-import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.OnFailureListener;
-import com.google.android.gms.tasks.OnSuccessListener;
-import com.google.android.gms.tasks.Task;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
-import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
-import com.google.firebase.firestore.QuerySnapshot;
 
 import java.util.Calendar;
 import java.util.Date;
@@ -55,18 +49,15 @@ public class FormularioGasto extends Fragment {
     private String mIdCategoria;
 
     // Vistas del formulario.
-    private Spinner mSpinnerTipo;
     private EditText mEditCantidad;
     private EditText mEditDescripcion;
-
-    //TODO: Usar el id real del usuario para crear gasto.
-    private final String ID_USUARIO_FAKE = "pXqACrhyoqZpdw8n11n64749YuI2";
 
     private Gasto mGasto;
     private boolean mNuevoGasto = true;
     private double mPresupuestoDiario;
     private double mGastoTotalDia;
 
+    private FirebaseAuth mAuth;
     private FirebaseFirestore mFirestore;
 
     public FormularioGasto() {
@@ -103,6 +94,7 @@ public class FormularioGasto extends Fragment {
             mIdCategoria = getArguments().getString(SUBCATEGORIA_GASTO);
         }
 
+        mAuth = FirebaseAuth.getInstance();
         mFirestore = FirebaseFirestore.getInstance();
 
         // Si este fragmento recibe el id del gasto, significa que debe actualizarlo (en vez
@@ -113,7 +105,7 @@ public class FormularioGasto extends Fragment {
         }
 
         // Obtener presupuesto diario.
-        getPresupuestoDiario(ID_USUARIO_FAKE);
+        getPresupuestoDiario();
         getGastoTotal();
     }
 
@@ -140,13 +132,7 @@ public class FormularioGasto extends Fragment {
 
         // Obtiene el boton para guardar gasto y configura su evento onClick para "guardar".
         FloatingActionButton fabGuardarGasto = view.findViewById(R.id.fab_guardar_gasto);
-        fabGuardarGasto.setOnClickListener(componentView ->
-        {
-            guardarGasto();
-            Toast.makeText(getActivity(), R.string.temporal_proceso, Toast.LENGTH_SHORT).show();
-
-            if (getActivity() != null) getActivity().finish();
-        });
+        fabGuardarGasto.setOnClickListener(componentView -> guardarGasto());
 
         return view;
     }
@@ -159,18 +145,23 @@ public class FormularioGasto extends Fragment {
 
                 mEditCantidad.setText(String.valueOf(mGasto.getCantidad()));
                 mEditDescripcion.setText(mGasto.getDescripcion());
-                mSpinnerTipo.setSelection(mGasto.getTipo().getValor());
             });
     }
 
-    private void getPresupuestoDiario(final String idUsuario) {
-        mFirestore.collection("usuarios").document(idUsuario)
-                .get()
-                .addOnSuccessListener(snapshot -> {
-                    DatosUsuario datosUsuario = DatosUsuario.fromDoc(snapshot);
+    private void getPresupuestoDiario() {
 
-                    mPresupuestoDiario = datosUsuario.getPresupuesto();
-                });
+        String idUsuario = mAuth.getUid();
+
+        if (idUsuario != null) {
+
+            mFirestore.collection("usuarios").document(idUsuario)
+                    .get()
+                    .addOnSuccessListener(snapshot -> {
+                        DatosUsuario datosUsuario = DatosUsuario.fromDoc(snapshot);
+
+                        mPresupuestoDiario = datosUsuario.getPresupuesto();
+                    });
+        }
     }
 
     private void getGastoTotal() {
@@ -181,43 +172,48 @@ public class FormularioGasto extends Fragment {
         hoy.set(Calendar.MILLISECOND, 0);
         Date fechaActual = hoy.getTime();
 
+        String idUsuario = mAuth.getUid();
+
+        if (idUsuario == null) return;
+
         mFirestore.collection(Gasto.NOMBRE_COLECCION_FIRESTORE)
-                .whereEqualTo(Gasto.CAMPO_ID_USUARIO, ID_USUARIO_FAKE)
+                .whereEqualTo(Gasto.CAMPO_ID_USUARIO, idUsuario)
                 .whereGreaterThanOrEqualTo(Gasto.CAMPO_FECHA, fechaActual)
                 .get()
-                .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                .addOnCompleteListener(task -> {
+                    if (task.isSuccessful() && task.getResult() != null)
+                    {
+                        double gastoTotal = 0;
 
-                    @Override
-                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
-                        if (task.isSuccessful() && task.getResult() != null)
+                        for (QueryDocumentSnapshot doc : task.getResult())
                         {
-                            double gastoTotal = 0;
-
-                            for (QueryDocumentSnapshot doc : task.getResult())
-                            {
-                                if (doc.getDouble(Gasto.CAMPO_CANTIDAD) != null) {
-                                    gastoTotal += doc.getDouble(Gasto.CAMPO_CANTIDAD);
-                                }
+                            if (doc.getDouble(Gasto.CAMPO_CANTIDAD) != null) {
+                                gastoTotal += doc.getDouble(Gasto.CAMPO_CANTIDAD);
                             }
-
-                            mGastoTotalDia = gastoTotal;
-
-                        } else {
-                            Log.d(TAG, "Error obteniendo documentos");
                         }
+
+                        mGastoTotalDia = gastoTotal;
+
+                    } else {
+                        Log.d(TAG, "Error obteniendo documentos");
                     }
                 });
     }
 
     private void guardarGasto() {
 
-        //TODO: Mejorar validacion y manejo de errores.
-        if (mEditCantidad.getText().toString().isEmpty()) return;
+        if (mEditCantidad.getText().toString().isEmpty()) {
+            mEditCantidad.setError(getString(R.string.err_cantidad_invalida));
+            return;
+        }
 
         final double cantidad = Double.parseDouble(mEditCantidad.getText().toString());
         final String descripcion = mEditDescripcion.getText().toString();
 
-        if (cantidad < 0) return;
+        if (cantidad < 0) {
+            mEditCantidad.setError(getString(R.string.err_cantidad_mayor_que_0));
+            return;
+        }
 
         mGastoTotalDia += cantidad;
 
@@ -225,27 +221,28 @@ public class FormularioGasto extends Fragment {
             enviarNotificacionDePresupuesto(mGastoTotalDia - mPresupuestoDiario);
         }
 
-        if (mNuevoGasto) {
-            mGasto = new Gasto(ID_USUARIO_FAKE, cantidad, Gasto.getTipoDeGasto(mTipoDeGasto), mIdCategoria, descripcion);
+        String idUsuario = mAuth.getUid();
 
-            //TODO: Hacer mas obvio cuando hay un error en la creacion del documento en Firestore.
+        if (idUsuario == null) return;
+
+        if (mNuevoGasto) {
+            mGasto = new Gasto(idUsuario, cantidad, Util.getTipoDeGasto(mTipoDeGasto), mIdCategoria, descripcion);
+
             mFirestore.collection(Gasto.NOMBRE_COLECCION_FIRESTORE)
                     .add(mGasto.asDoc())
-                    .addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
-                        @Override
-                        public void onSuccess(DocumentReference documentReference) {
-                            Log.d(TAG, "Documento agregado con ID: " + documentReference.getId());
-                        }
+                    .addOnSuccessListener(documentReference -> {
+                        Log.d(TAG, "Documento agregado con ID: " + documentReference.getId());
+                        Toast.makeText(getActivity(), R.string.gasto_agregado, Toast.LENGTH_SHORT).show();
+
+                        if (getActivity() != null) getActivity().finish();
                     })
-                    .addOnFailureListener(new OnFailureListener() {
-                        @Override
-                        public void onFailure(@NonNull Exception e) {
-                            Log.d(TAG, "Error agregando documento: ", e);
-                        }
+                    .addOnFailureListener(e -> {
+                        Toast.makeText(getContext(), getString(R.string.err_registro_gasto), Toast.LENGTH_SHORT).show();
+                        Log.d(TAG, "Error agregando documento: ", e);
                     });
         }
         else {
-            mGasto.setTipo(Gasto.getTipoDeGasto(mTipoDeGasto));
+            mGasto.setTipo(Util.getTipoDeGasto(mTipoDeGasto));
             mGasto.setCantidad(cantidad);
             mGasto.setCategoria(mIdCategoria);
             mGasto.setDescripcion(descripcion);
@@ -266,19 +263,23 @@ public class FormularioGasto extends Fragment {
         Intent intent = new Intent(getActivity(), MainActivity.class);
         PendingIntent pendingIntent = PendingIntent.getActivity(getActivity(), 0, intent, 0);
 
-        NotificationCompat.Builder builder = new NotificationCompat.Builder(getContext(), getString(R.string.id_canal_notif))
-                .setSmallIcon(R.drawable.ic_launcher_foreground)
-                .setContentTitle(getString(R.string.titulo_notificacion_presupuesto))
-                .setContentText(getString(R.string.contenido_notificacion_presupuesto) + Util.fDinero.format(gastoExtra))
-                .setPriority(NotificationCompat.PRIORITY_DEFAULT)
-                .setContentIntent(pendingIntent)
-                .setAutoCancel(true);
+        Context contexto = getActivity();
 
-        int idNotificacion = 1;
-        NotificationManagerCompat notificationManager = NotificationManagerCompat.from(getActivity());
+        if (contexto != null) {
+            NotificationCompat.Builder builder = new NotificationCompat.Builder(contexto, getString(R.string.id_canal_notif))
+                    .setSmallIcon(R.drawable.icono_sin_fondo)
+                    .setContentTitle(getString(R.string.titulo_notificacion_presupuesto))
+                    .setContentText(getString(R.string.contenido_notificacion_presupuesto) + Util.fDinero.format(gastoExtra))
+                    .setPriority(NotificationCompat.PRIORITY_DEFAULT)
+                    .setContentIntent(pendingIntent)
+                    .setAutoCancel(true);
 
-        notificationManager.notify(idNotificacion, builder.build());
+            int idNotificacion = 1;
+            NotificationManagerCompat notificationManager = NotificationManagerCompat.from(getActivity());
 
-        Log.i(TAG, "Notificacion enviada");
+            notificationManager.notify(idNotificacion, builder.build());
+
+            Log.i(TAG, "Notificacion enviada");
+        }
     }
 }

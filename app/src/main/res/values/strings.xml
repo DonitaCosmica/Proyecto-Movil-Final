@@ -20,6 +20,7 @@
     <string name="titulo_nuevo_gasto">Agregar un gasto</string>
     <string name="titulo_editar_gasto">Modificar un gasto</string>
     <string name="descripcion_agregar_gasto">Escribe la cantidad que gastaste, puedes añadir una breve descripción.</string>
+    <string name="gasto_agregado">Gasto agregado</string>
 
     <!-- Comunes -->
     <string name="confirmar">Confirmar</string>

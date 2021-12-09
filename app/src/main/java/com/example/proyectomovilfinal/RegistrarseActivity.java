@@ -19,10 +19,8 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseAuthUserCollisionException;
 import com.google.firebase.auth.FirebaseUser;
 
-import static android.content.ContentValues.TAG;
-
-import java.util.regex.Pattern;
 import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 public class RegistrarseActivity extends AppCompatActivity {
 
@@ -76,7 +74,7 @@ public class RegistrarseActivity extends AppCompatActivity {
 
             if (correoValido) {
 
-                if (password.length() >= 8 && password.length <= 12) {
+                if (password.length() >= 8 && password.length() <= 12) {
 
                     Pattern patron = Pattern.compile("^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d).+$");
                     Matcher matcher = patron.matcher(password);
@@ -113,7 +111,7 @@ public class RegistrarseActivity extends AppCompatActivity {
                                     }
                                 });
                         } else {
-                            text_contrasenaConfirmacion_registrarse.setError("Las contraseñas no coinciden")
+                            text_contrasenaConfirmacion_registrarse.setError("Las contraseñas no coinciden");
                         }
                     } else {
                         text_contrasena_registrarse.setError("La contraseña debe tener un número y una mayúscula");

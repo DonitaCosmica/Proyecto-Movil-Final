@@ -2,6 +2,7 @@ package com.example.proyectomovilfinal.data;
 
 import androidx.annotation.NonNull;
 
+import com.example.proyectomovilfinal.Util;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.ServerTimestamp;
 
@@ -66,7 +67,7 @@ public class Gasto {
         Gasto gasto = new Gasto(
             doc.getString(CAMPO_ID_USUARIO),
             doc.getDouble(CAMPO_CANTIDAD),
-            tipoDesdeString(doc.getString(CAMPO_TIPO)),
+            Util.tipoDesdeString(doc.getString(CAMPO_TIPO)),
             doc.getString(CAMPO_ID_CATEGORIA),
             doc.getString(CAMPO_DESCRIPCION)
         );
@@ -125,38 +126,5 @@ public class Gasto {
 
     public void setTipo(TipoGasto tipo) {
         mTipo = tipo;
-    }
-
-    //TODO: Crear utilidad con este metodo.
-    public static TipoGasto tipoDesdeString(final String tipoStr) {
-        switch (tipoStr) {
-            case "ENTRETENIMIENTO":
-                return TipoGasto.ENTRETENIMIENTO;
-            case "EXTRA":
-                return TipoGasto.EXTRA;
-
-            default: return TipoGasto.NECESARIO;
-        }
-    }
-
-    //TODO: Crear funcion de utilidad para esto.
-    /**
-     * Convierte un número entero entre 0 y 2 en un valor del enum {@link TipoGasto}.
-     *
-     * @param opcion un número entero que represente un valor de {@link TipoGasto}
-     * @return el valor de {@link TipoGasto} correspondiente.
-     * @throws IllegalArgumentException si el número no tiene el valor de ninguno del enum.
-     */
-    public static TipoGasto getTipoDeGasto(int opcion) {
-        switch (opcion) {
-            case 0:
-                return TipoGasto.NECESARIO;
-            case 1:
-                return TipoGasto.ENTRETENIMIENTO;
-            case 2:
-                return TipoGasto.EXTRA;
-            default:
-                throw new IllegalArgumentException();
-        }
     }
 }

@@ -19,6 +19,7 @@ import com.example.proyectomovilfinal.R;
 import com.example.proyectomovilfinal.data.Gasto;
 import com.example.proyectomovilfinal.paginas.adapters.AdapterHistorialGastos;
 import com.firebase.ui.firestore.FirestoreRecyclerOptions;
+import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.Query;
@@ -93,11 +94,11 @@ public class PaginaHistorialGastos extends Fragment {
     }
 
     private void initRecycler(View view) {
-        //TODO: Usar el id real del usuario autenticado.
-        final String ID_USUARIO_TEMPORAL = "pXqACrhyoqZpdw8n11n64749YuI2";
+
+        String idUsuario = FirebaseAuth.getInstance().getUid();
 
         Query query = mFirestore.collection(Gasto.NOMBRE_COLECCION_FIRESTORE)
-                .whereEqualTo(Gasto.CAMPO_ID_USUARIO, ID_USUARIO_TEMPORAL)
+                .whereEqualTo(Gasto.CAMPO_ID_USUARIO, idUsuario)
                 .limit(10)
                 .orderBy(Gasto.CAMPO_FECHA, Query.Direction.DESCENDING);
 

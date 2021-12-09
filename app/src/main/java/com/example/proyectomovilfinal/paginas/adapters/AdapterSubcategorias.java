@@ -14,10 +14,6 @@ import com.firebase.ui.firestore.FirestoreRecyclerAdapter;
 import com.firebase.ui.firestore.FirestoreRecyclerOptions;
 import com.google.firebase.firestore.DocumentSnapshot;
 
-/**
- * {@link RecyclerView.Adapter} that can display a {@link DummyItem}.
- * TODO: Reemplazar la implementacion para usar nuestro propio tipo de dato.
- */
 public class AdapterSubcategorias extends FirestoreRecyclerAdapter<Subcategoria, AdapterSubcategorias.ViewHolder> {
 
     private OnItemClickListener mListener;
@@ -47,7 +43,7 @@ public class AdapterSubcategorias extends FirestoreRecyclerAdapter<Subcategoria,
 
     public class ViewHolder extends RecyclerView.ViewHolder
     {
-        private TextView mTxtNombreSubcategoria;
+        private final TextView mTxtNombreSubcategoria;
 
         public ViewHolder(View view) {
             super(view);

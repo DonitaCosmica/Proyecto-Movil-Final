@@ -9,19 +9,18 @@ import android.widget.TextView;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.proyectomovilfinal.R;
-import com.example.proyectomovilfinal.data.DummyContent.DummyItem;
 
 import java.util.List;
 
 /**
- * {@link RecyclerView.Adapter} that can display a {@link DummyItem}.
+ * {@link RecyclerView.Adapter} that can display a {@link String}.
  * TODO: Reemplazar la implementacion para usar nuestro propio tipo de dato.
  */
 public class AdapterHistorialPasos extends RecyclerView.Adapter<AdapterHistorialPasos.ViewHolder> {
 
-    private final List<DummyItem> mValues;
+    private final List<String> mValues;
 
-    public AdapterHistorialPasos(List<DummyItem> items) {
+    public AdapterHistorialPasos(List<String> items) {
         mValues = items;
     }
 
@@ -36,10 +35,10 @@ public class AdapterHistorialPasos extends RecyclerView.Adapter<AdapterHistorial
     @Override
     public void onBindViewHolder(final ViewHolder holder, int position)
     {
-        holder.mItem = mValues.get(position);
-
-        holder.mNumeroTarjeta.setText(mValues.get(position).id);
-        holder.mTituloTarjeta.setText(mValues.get(position).content);
+//        holder.mItem = mValues.get(position);
+//
+//        holder.mNumeroTarjeta.setText(mValues.get(position).id);
+//        holder.mTituloTarjeta.setText(mValues.get(position).content);
     }
 
     @Override
@@ -52,7 +51,7 @@ public class AdapterHistorialPasos extends RecyclerView.Adapter<AdapterHistorial
         public final View mView;
         public TextView mTituloTarjeta;
         public TextView mNumeroTarjeta;
-        public DummyItem mItem;
+//        public DummyItem mItem;
 
         public ViewHolder(View view)
         {
