@@ -10,6 +10,8 @@ import com.example.proyectomovilfinal.data.TipoUsuario;
 
 import java.text.DateFormat;
 import java.text.DecimalFormat;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.Locale;
 
 public class Util {
@@ -28,6 +30,8 @@ public class Util {
 
     public static final String TIPO_CATEGORIA = "TIPO_DE_CATEGORIA";
     //endregion
+
+    public static final int GOOGLE_FIT_PERMISSIONS_REQUEST_CODE = 101;
 
     public static void guardarCredenciales(Context context, String correo, String password) {
 
@@ -109,5 +113,15 @@ public class Util {
             default:
                 throw new IllegalArgumentException();
         }
+    }
+
+    public static Date obtenerFechaActual() {
+        Calendar fechaHoraDeHoy = Calendar.getInstance();
+        fechaHoraDeHoy.set(Calendar.HOUR, 0);
+        fechaHoraDeHoy.set(Calendar.MINUTE, 0);
+        fechaHoraDeHoy.set(Calendar.SECOND, 0);
+        fechaHoraDeHoy.set(Calendar.MILLISECOND, 0);
+
+        return fechaHoraDeHoy.getTime();
     }
 }

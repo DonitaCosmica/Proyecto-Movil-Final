@@ -26,7 +26,6 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 
-import java.util.Calendar;
 import java.util.Date;
 
 /**
@@ -165,20 +164,16 @@ public class FormularioGasto extends Fragment {
     }
 
     private void getGastoTotal() {
-        Calendar hoy = Calendar.getInstance();
-        hoy.set(Calendar.HOUR, 0);
-        hoy.set(Calendar.MINUTE, 0);
-        hoy.set(Calendar.SECOND, 0);
-        hoy.set(Calendar.MILLISECOND, 0);
-        Date fechaActual = hoy.getTime();
 
         String idUsuario = mAuth.getUid();
+
+        Date hoy = Util.obtenerFechaActual();
 
         if (idUsuario == null) return;
 
         mFirestore.collection(Gasto.NOMBRE_COLECCION_FIRESTORE)
                 .whereEqualTo(Gasto.CAMPO_ID_USUARIO, idUsuario)
-                .whereGreaterThanOrEqualTo(Gasto.CAMPO_FECHA, fechaActual)
+                .whereGreaterThanOrEqualTo(Gasto.CAMPO_FECHA, hoy)
                 .get()
                 .addOnCompleteListener(task -> {
                     if (task.isSuccessful() && task.getResult() != null)
