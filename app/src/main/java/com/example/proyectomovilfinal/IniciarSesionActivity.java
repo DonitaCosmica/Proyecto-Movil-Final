@@ -11,11 +11,13 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.example.proyectomovilfinal.data.DatosUsuario;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.firestore.FirebaseFirestore;
 
 public class IniciarSesionActivity extends AppCompatActivity {
 
@@ -76,8 +78,22 @@ public class IniciarSesionActivity extends AppCompatActivity {
 
                                 Toast.makeText(getApplicationContext(), "iniciando sesion.", Toast.LENGTH_SHORT).show();
 
-                                Intent i = new Intent(getApplicationContext(), MainActivity.class);
-                                startActivity(i);
+                                final Intent i = new Intent(getApplicationContext(), MainActivity.class);
+
+                                FirebaseFirestore.getInstance().collection(DatosUsuario.NOMBRE_COLECCION_FIRESTORE)
+                                        .document(user.getUid())
+                                        .get()
+                                        .addOnSuccessListener(documentSnapshot -> {
+
+                                            DatosUsuario datosUsuario = DatosUsuario.fromDoc(documentSnapshot);
+                                            Log.i(TAG, "El tipo de usuario: " + datosUsuario.getTipo());
+                                            i.putExtra(Util.KEY_ARG_TIPO_USUARIO, datosUsuario.getTipo());
+                                            startActivity(i);
+                                        })
+                                        .addOnFailureListener(e -> {
+                                            Log.w(TAG, "Error obteniendo tipo de usuario");
+                                            startActivity(i);
+                                        });
 
                             } else {
                                 // If sign in fails, display a message to the user.
@@ -95,4 +111,6 @@ public class IniciarSesionActivity extends AppCompatActivity {
         Intent i = new Intent(this, RegistrarseActivity.class);
         startActivity(i);
     }
+
+
 }

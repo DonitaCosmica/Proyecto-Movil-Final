@@ -88,6 +88,7 @@ public class DatosUsuarioActivity extends AppCompatActivity {
                         Log.i(TAG, "Datos del usuario guardados.");
 
                         Intent intent = new Intent(DatosUsuarioActivity.this, MainActivity.class);
+                        intent.putExtra(Util.KEY_ARG_TIPO_USUARIO, datosUsuario.getTipo());
                         startActivity(intent);
                         finish();
                     }

@@ -9,7 +9,6 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.proyectomovilfinal.R;
-import com.example.proyectomovilfinal.data.DummyContent.DummyItem;
 import com.example.proyectomovilfinal.data.TipoGasto;
 
 /**

@@ -30,7 +30,6 @@ public class SplashScreen extends AppCompatActivity {
 
         mAuth = FirebaseAuth.getInstance();
 
-        //TODO: Verificar si hay credenciales o si el usuario ya inicio sesion
         obtenerCredenciales();
 
         if (mCorreo != null && !mCorreo.isEmpty()) {

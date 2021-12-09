@@ -7,7 +7,9 @@ import android.util.Log;
 
 import com.example.proyectomovilfinal.data.TipoUsuario;
 
+import java.text.DateFormat;
 import java.text.DecimalFormat;
+import java.util.Locale;
 
 public class Util {
 
@@ -15,7 +17,13 @@ public class Util {
 
     public static final DecimalFormat fDinero = new DecimalFormat("0.00");
 
+    public static DateFormat fFecha = DateFormat.getDateTimeInstance(DateFormat.MEDIUM, DateFormat.SHORT, Locale.getDefault());
+
     public static final double PRESUPUESTO_MAXIMO = 1000000.0;
+
+    //region Keys
+    public static final String KEY_ARG_TIPO_USUARIO = "TIPO_USUARIO";
+    //endregion
 
     public static void guardarCredenciales(Context context, String correo, String password) {
 

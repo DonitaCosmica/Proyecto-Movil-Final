@@ -56,7 +56,6 @@ public class RegistrarseActivity extends AppCompatActivity {
         if(currentUser != null){
             currentUser.reload();
         }
-        
     }
 
     public void registrarUsuario() {
