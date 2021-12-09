@@ -44,7 +44,7 @@ public class Subcategoria {
         Subcategoria subcategoria = new Subcategoria(
             doc.getString(CAMPO_ID_USUARIO),
             doc.getString(CAMPO_NOMBRE),
-            Util.getTipoDeGasto(Math.toIntExact(doc.getLong(CAMPO_TIPO)))
+            Util.tipoDesdeString(doc.getString(CAMPO_TIPO))
         );
 
         subcategoria.setIdSubcategoria(doc.getId());

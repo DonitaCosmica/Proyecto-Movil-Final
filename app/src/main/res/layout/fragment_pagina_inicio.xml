@@ -15,20 +15,6 @@
         android:paddingEnd="16dp"
         android:paddingBottom="16dp">
 
-        <Button
-            android:id="@+id/btn_ver_historial_gastos"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:backgroundTint="@color/white"
-            android:elevation="0dp"
-            android:text="@string/temporal_btn"
-            android:textColor="@color/teal_200"
-            android:drawableEnd="@drawable/ic_baseline_add_24"
-            android:drawableTint="@color/teal_200"
-            app:layout_constraintBottom_toBottomOf="@+id/titulo_gastos_recientes"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toTopOf="@+id/titulo_gastos_recientes" />
-
         <LinearLayout
             android:id="@+id/linearLayout"
             android:layout_width="0dp"
@@ -57,7 +43,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginStart="32dp"
                 android:layout_marginEnd="32dp"
-                android:text="@string/temporal_cantidad" />
+                android:text="@string/cero" />
         </LinearLayout>
 
         <TextView
@@ -76,7 +62,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="32dp"
-            android:text="@string/hello_blank_fragment"
+            android:text="@string/titulo_gastos_recientes"
             android:textSize="24sp"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/linearLayout" />
@@ -93,14 +79,18 @@
             app:layout_constraintTop_toBottomOf="@+id/subtitulo_inicio" />
 
         <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/lista_gastos_recientes"
-            android:layout_width="0dp"
+            android:id="@+id/lista_historial_gastos_recientes"
+            android:name="com.example.proyectomovilfinal.paginas.PaginaHistorialGastos"
+            android:layout_width="match_parent"
             android:layout_height="0dp"
-            android:layout_marginTop="24dp"
+            android:layout_marginTop="16dp"
+            app:layoutManager="LinearLayoutManager"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/titulo_gastos_recientes" />
+            app:layout_constraintTop_toBottomOf="@id/titulo_gastos_recientes"
+            tools:context=".paginas.PaginaHistorialGastos"
+            tools:listitem="@layout/tarjeta_gasto" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 

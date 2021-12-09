@@ -1,6 +1,5 @@
 package com.example.proyectomovilfinal.paginas.adapters;
 
-import android.content.res.Resources;
 import android.graphics.drawable.Drawable;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -17,6 +16,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.example.proyectomovilfinal.R;
 import com.example.proyectomovilfinal.Util;
 import com.example.proyectomovilfinal.data.Gasto;
+import com.example.proyectomovilfinal.paginas.PaginaHistorialGastos;
 import com.firebase.ui.firestore.FirestoreRecyclerAdapter;
 import com.firebase.ui.firestore.FirestoreRecyclerOptions;
 import com.google.firebase.firestore.DocumentSnapshot;
@@ -84,12 +84,11 @@ public class AdapterHistorialGastos extends FirestoreRecyclerAdapter<Gasto, Adap
 
         public void bind(final Gasto gasto) {
 
-            Resources res = itemView.getResources();
-
+            String nombreSubcategoria = PaginaHistorialGastos.mSubcategoriasUsuario.get(gasto.getCategoria());
             String fechaConFormato = Util.fFechaHora.format(gasto.getFecha());
             String cantidadConFormato = Util.fDinero.format(gasto.getCantidad());
 
-            mTituloTarjeta.setText("Subcategoria");
+            mTituloTarjeta.setText(nombreSubcategoria);
             mSubtituloTarjeta.setText(fechaConFormato);
             mDescripcionTarjeta.setText(gasto.getDescripcion());
             mTextoFinalTarjeta.setText(cantidadConFormato);

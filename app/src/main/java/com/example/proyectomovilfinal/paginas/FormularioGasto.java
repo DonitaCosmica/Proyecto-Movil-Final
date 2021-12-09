@@ -142,6 +142,9 @@ public class FormularioGasto extends Fragment {
             .addOnSuccessListener(snapshot -> {
                 mGasto = Gasto.fromDoc(snapshot);
 
+                mTipoDeGasto = mGasto.getTipo().getValor();
+                mIdCategoria = mGasto.getCategoria();
+
                 mEditCantidad.setText(String.valueOf(mGasto.getCantidad()));
                 mEditDescripcion.setText(mGasto.getDescripcion());
             });
@@ -244,7 +247,17 @@ public class FormularioGasto extends Fragment {
 
             mFirestore.collection(Gasto.NOMBRE_COLECCION_FIRESTORE)
                     .document(mIdGasto)
-                    .update(mGasto.asDoc());
+                    .update(mGasto.asDoc())
+                    .addOnSuccessListener(documentReference -> {
+                        Log.d(TAG, "Gasto actualizado con exito");
+                        Toast.makeText(getActivity(), R.string.gasto_modificado, Toast.LENGTH_SHORT).show();
+
+                        if (getActivity() != null) getActivity().finish();
+                    })
+                    .addOnFailureListener(e -> {
+                        Toast.makeText(getContext(), getString(R.string.err_registro_gasto), Toast.LENGTH_SHORT).show();
+                        Log.d(TAG, "Error agregando documento: ", e);
+                    });
         }
     }
 

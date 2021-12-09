@@ -49,13 +49,11 @@ public class AdapterSubcategorias extends FirestoreRecyclerAdapter<Subcategoria,
             super(view);
             mTxtNombreSubcategoria = view.findViewById(R.id.titulo_tarjeta);
 
-            view.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    int posicion = getAbsoluteAdapterPosition();
-                    if (posicion != RecyclerView.NO_POSITION && mListener != null) {
-                        mListener.onItemClick(getSnapshots().getSnapshot(posicion), posicion);
-                    }
+            view.setOnClickListener(itemView -> {
+
+                int posicion = getAbsoluteAdapterPosition();
+                if (posicion != RecyclerView.NO_POSITION && mListener != null) {
+                    mListener.onItemClick(getSnapshots().getSnapshot(posicion), posicion);
                 }
             });
         }

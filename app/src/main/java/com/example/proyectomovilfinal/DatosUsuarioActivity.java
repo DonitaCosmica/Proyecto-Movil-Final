@@ -6,13 +6,12 @@ import android.util.Log;
 import android.widget.Button;
 import android.widget.EditText;
 
-import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.proyectomovilfinal.data.DatosUsuario;
+import com.example.proyectomovilfinal.data.Subcategoria;
+import com.example.proyectomovilfinal.data.TipoGasto;
 import com.example.proyectomovilfinal.data.TipoUsuario;
-import com.google.android.gms.tasks.OnFailureListener;
-import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.FirebaseFirestore;
@@ -80,24 +79,24 @@ public class DatosUsuarioActivity extends AppCompatActivity {
                 TipoUsuario.NORMAL
         );
 
+        Subcategoria subcategoriaSnacks = new Subcategoria(
+                mIdUsuario, getString(R.string.nombre_subcategorias_snacks), TipoGasto.EXTRA
+        );
+        mFirestore.collection(Subcategoria.NOMBRE_COLECCION_FIRESTORE)
+                .add(subcategoriaSnacks.asDoc());
+
         mFirestore.collection(DatosUsuario.NOMBRE_COLECCION_FIRESTORE)
                 .document(mIdUsuario).set(datosUsuario.asDoc())
-                .addOnSuccessListener(new OnSuccessListener<Void>() {
-                    @Override
-                    public void onSuccess(Void unused) {
-                        Log.i(TAG, "Datos del usuario guardados.");
+                .addOnSuccessListener(unused -> {
+                    Log.i(TAG, "Datos del usuario guardados.");
 
-                        Intent intent = new Intent(DatosUsuarioActivity.this, MainActivity.class);
-                        intent.putExtra(Util.KEY_ARG_TIPO_USUARIO, datosUsuario.getTipo());
-                        startActivity(intent);
-                        finish();
-                    }
+                    Intent intent = new Intent(DatosUsuarioActivity.this, MainActivity.class);
+                    intent.putExtra(Util.KEY_ARG_TIPO_USUARIO, datosUsuario.getTipo());
+                    startActivity(intent);
+                    finish();
                 })
-                .addOnFailureListener(new OnFailureListener() {
-                    @Override
-                    public void onFailure(@NonNull Exception e) {
-                        Log.e(TAG, "Error guardando datos del usuario: ", e);
-                    }
+                .addOnFailureListener(e -> {
+                    Log.e(TAG, "Error guardando datos del usuario: ", e);
                 });
     }
 }
