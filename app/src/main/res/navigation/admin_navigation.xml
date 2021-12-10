@@ -4,13 +4,13 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/admin_navigation"
-    app:startDestination="@id/fragmento_inicio">
+    app:startDestination="@id/fragmento_lista_usuarios">
 
     <fragment
-        android:id="@+id/fragmento_inicio"
-        android:name="com.example.proyectomovilfinal.paginas.PaginaInicio"
-        android:label="@string/bot_nav_inicio"
-        tools:layout="@layout/fragment_pagina_inicio"/>
+        android:id="@+id/fragmento_lista_usuarios"
+        android:name="com.example.proyectomovilfinal.paginas.admin.PaginaListaUsuarios"
+        android:label="@string/bot_nav_usuarios"
+        tools:layout="@layout/fragment_pagina_lista_usuarios"/>
 
     <fragment
         android:id="@+id/fragmento_perfil"

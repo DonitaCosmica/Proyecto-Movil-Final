@@ -60,6 +60,13 @@ public class MainActivity extends AppCompatActivity {
 
         revisarPermisoGoogleFit();
 
+        // El botón agrega un nuevo gasto, está presente en todos los views de navegación.
+        FloatingActionButton fabAgregarGasto = findViewById(R.id.fab_agregar_gasto);
+        fabAgregarGasto.setOnClickListener(view -> {
+            Intent intent = new Intent(MainActivity.this, AgregarGastoActivity.class);
+            startActivity(intent);
+        });
+
         //region Configurar navegacion
         // Navegacion con barra inferior.
         BottomNavigationView navView = findViewById(R.id.bottom_nav);
@@ -82,8 +89,9 @@ public class MainActivity extends AppCompatActivity {
                         VISTA_PERFIL
                 ).build();
 
-                navView.inflateMenu(R.menu.menu_nav_default);
+                navView.inflateMenu(R.menu.menu_nav_analista);
                 navView.getMenu().getItem(2).setEnabled(false);
+                fabAgregarGasto.setEnabled(false);
                 break;
 
             case ADMINISTRADOR:
@@ -94,6 +102,7 @@ public class MainActivity extends AppCompatActivity {
                 ).build();
 
                 navView.inflateMenu(R.menu.menu_nav_admin);
+                fabAgregarGasto.setEnabled(false);
                 break;
 
             case NORMAL:
@@ -105,6 +114,8 @@ public class MainActivity extends AppCompatActivity {
                 ).build();
 
                 navView.inflateMenu(R.menu.menu_nav_default);
+                navView.getMenu().getItem(2).setEnabled(false);
+                fabAgregarGasto.setEnabled(true);
                 break;
         }
 
@@ -114,13 +125,6 @@ public class MainActivity extends AppCompatActivity {
 
         NavigationUI.setupWithNavController(navView, controladorNav);
         //endregion
-
-        // El botón agrega un nuevo gasto, está presente en todos los views de navegación.
-        FloatingActionButton fabAgregarGasto = findViewById(R.id.fab_agregar_gasto);
-        fabAgregarGasto.setOnClickListener(view -> {
-            Intent intent = new Intent(MainActivity.this, AgregarGastoActivity.class);
-            startActivity(intent);
-        });
     }
 
     @Override
