@@ -8,14 +8,14 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
-import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.Task;
-import com.google.firebase.auth.AuthResult;
+import com.example.proyectomovilfinal.data.DatosUsuario;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseAuthInvalidCredentialsException;
+import com.google.firebase.auth.FirebaseAuthInvalidUserException;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.firestore.FirebaseFirestore;
 
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -60,59 +60,110 @@ public class IniciarSesionActivity extends AppCompatActivity {
         }
     }
 
-
     private void iniciarSesion(){
+        // Obtener valores de los campos.
+        String correo = mEditTxtCampoCorreo.getText().toString().trim();
+        String password = mEditTxtCampoPassword.getText().toString().trim();
 
-        String correo = mEditTxtCampoCorreo.getText().toString();
-        String password = mEditTxtCampoPassword.getText().toString();
-
-        if(!correo.isEmpty() && !password.isEmpty()) {
-            Pattern pattern = Pattern.compile("^[_A-Za-z0-9-\\+]+(\\.[_A-Za-z0-9-]+)*@[A-Za-z0-9-]+(\\.[A-Za-z0-9]+)*(\\.[A-Za-z]{2,})$");
-            Matcher mather = pattern.matcher(correo);
-            boolean correoValido = mather.matches();
-          
-            if(correoValido){
-                if (password.length() >= 8 && password.length() <= 12) {
-                  
-                    //Pattern patron = Pattern.compile(".+[0-9]+.+");
-                    Pattern patron = Pattern.compile("^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d).+$");
-                    Matcher matcher = patron.matcher(password);
-                    boolean passwordValido = matcher.matches();
-                        if (passwordValido == true) {
-                            mAuth.signInWithEmailAndPassword(correo.trim(), password.trim())
-                                .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
-                                    @Override
-                                    public void onComplete(@NonNull Task<AuthResult> task) {
-                                        if (task.isSuccessful()) {
-                                            // Sign in success, update UI with the signed-in user's information
-                                            Log.d(TAG, "signInWithEmail:success");
-                                            FirebaseUser user = mAuth.getCurrentUser();
-                                            
-                                            Util.guardarCredenciales(IniciarSesionActivity.this, correo, password);
-
-                                            Toast.makeText(getApplicationContext(), "iniciando sesion.", Toast.LENGTH_SHORT).show();
-                                            
-                                            Intent i = new Intent(getApplicationContext(), MainActivity.class);
-                                            startActivity(i);
-                                        } else {
-                                            // If sign in fails, display a message to the user.
-                                            Log.w(TAG, "signInWithEmail:failure", task.getException());
-                                            Toast.makeText(getApplicationContext(), "Correo o contraseña incorrectos", Toast.LENGTH_SHORT).show();
-                                        }
-                                    }
-                                });
-                        } else {
-                            mEditTxtCampoPassword.setError(getString(R.string.err_correo_no_valido));
-                        }
-                } else {
-                    mEditTxtCampoPassword.setError(getString(R.string.err_correo_no_valido));
-                }
-            } else {
-                mEditTxtCampoCorreo.setError(getString(R.string.err_correo_no_valido));
-            }
-        } else {
-            Toast.makeText(IniciarSesionActivity.this, "Los espacios estan vacios", Toast.LENGTH_SHORT).show();
+        // Validar que el correo no este vacio
+        if(correo.isEmpty()){
+            mEditTxtCampoCorreo.setError(getString(R.string.err_campo_vacio));
+            mEditTxtCampoCorreo.requestFocus();
+            return;
         }
+
+        // Validar el formato del correo.
+        Pattern pattern = Pattern.compile(getString(R.string.regex_validar_email));
+        // Comparar
+        Matcher mather = pattern.matcher(correo);
+        // Asignar resultado a un bool.
+        boolean correoValido = mather.matches();
+
+        // Validar si el correo cumple el formato requerido.
+        if(!correoValido){
+            mEditTxtCampoCorreo.setError(getString(R.string.err_correo_no_valido));
+            mEditTxtCampoCorreo.requestFocus();
+            return;
+        }
+
+        // Validar que la password no este vacia
+        if (password.isEmpty()) {
+            mEditTxtCampoPassword.setError(getString(R.string.err_campo_vacio));
+            mEditTxtCampoPassword.requestFocus();
+            return;
+        }
+
+        // Validar que la longitud del password este en el rango de caracteres.
+        if (password.length() < 8 || password.length() > 12) {
+            mEditTxtCampoPassword.setError(getString(R.string.err_tam_password));
+            mEditTxtCampoPassword.requestFocus();
+            return;
+        }
+
+        // Validar formato del password.
+        Pattern patron = Pattern.compile(getString(R.string.regex_validar_contrasena));
+        // Comparar
+        Matcher matcher = patron.matcher(password);
+        // Asignar resultado a un bool.
+        boolean passValida = matcher.matches();
+
+        // Si la contraseña no cumple con el formato marca error.
+        if (!passValida) {
+            mEditTxtCampoPassword.setError(getString(R.string.err_formato_password));
+            mEditTxtCampoPassword.requestFocus();
+            return;
+        }
+
+        mAuth.signInWithEmailAndPassword(correo, password)
+                .addOnSuccessListener(authResult -> {
+
+                    // El inicio de sesion es exitoso, obtener el usuario de Firebase Auth.
+                    FirebaseUser user = mAuth.getCurrentUser();
+
+                    if (user == null) return;
+
+                    // Guardar credenciales en SharedPreferences.
+                    Util.guardarCredenciales(IniciarSesionActivity.this, correo, password);
+
+                    Toast.makeText(
+                            getApplicationContext(),
+                            getString(R.string.inicio_sesion_en_proceso),
+                            Toast.LENGTH_SHORT
+                    ).show();
+
+                    final Intent i = new Intent(getApplicationContext(), MainActivity.class);
+
+                    // Obtener tipo de usuario.
+                    FirebaseFirestore.getInstance().collection(DatosUsuario.NOMBRE_COLECCION_FIRESTORE)
+                            .document(user.getUid())
+                            .get()
+                            .addOnSuccessListener(documentSnapshot -> {
+
+                                DatosUsuario datosUsuario = DatosUsuario.fromDoc(documentSnapshot);
+                                Log.i(TAG, "Tipo de usuario: " + datosUsuario.getTipo());
+                                i.putExtra(Util.KEY_ARG_TIPO_USUARIO, datosUsuario.getTipo());
+                                startActivity(i);
+                            })
+                            .addOnFailureListener(e -> {
+                                Log.w(TAG, "Error obteniendo tipo de usuario");
+                                startActivity(i);
+                            });
+                })
+                .addOnFailureListener(e -> {
+                    // El inicio de sesion fallo.
+                    Log.w(TAG, "signInWithEmail:failure", e);
+
+                    if (e instanceof FirebaseAuthInvalidUserException) {
+                        // No hay un usuario con el correo especificado.
+                        Toast.makeText(getApplicationContext(), getString(R.string.err_usuario_no_registrado), Toast.LENGTH_SHORT).show();
+                    } else if (e instanceof FirebaseAuthInvalidCredentialsException) {
+                        // La contraseña es incorrecta.
+                        Toast.makeText(getApplicationContext(), getString(R.string.err_credenciales), Toast.LENGTH_SHORT).show();
+                    } else {
+                        // Hubo otro tipo de error.
+                        Toast.makeText(getApplicationContext(), getString(R.string.err_inicio_sesion), Toast.LENGTH_SHORT).show();
+                    }
+                });
     }
 
     private void irARegistro(){

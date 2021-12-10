@@ -3,7 +3,7 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/navegacion_default"
+    android:id="@+id/admin_navigation"
     app:startDestination="@id/fragmento_inicio">
 
     <fragment
@@ -11,18 +11,6 @@
         android:name="com.example.proyectomovilfinal.paginas.PaginaInicio"
         android:label="@string/bot_nav_inicio"
         tools:layout="@layout/fragment_pagina_inicio"/>
-
-    <fragment
-        android:id="@+id/fragmento_gastos"
-        android:name="com.example.proyectomovilfinal.paginas.PaginaHistorialGastos"
-        android:label="@string/bot_nav_gastos"
-        tools:layout="@layout/pagina_historial_gastos"/>
-
-    <fragment
-        android:id="@+id/fragmento_pasos"
-        android:name="com.example.proyectomovilfinal.paginas.PaginaHistorialPasos"
-        android:label="@string/bot_nav_pasos"
-        tools:layout="@layout/pagina_historial_pasos"/>
 
     <fragment
         android:id="@+id/fragmento_perfil"

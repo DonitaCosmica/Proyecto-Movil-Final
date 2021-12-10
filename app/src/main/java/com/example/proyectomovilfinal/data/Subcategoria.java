@@ -1,5 +1,6 @@
 package com.example.proyectomovilfinal.data;
 
+import com.example.proyectomovilfinal.Util;
 import com.google.firebase.firestore.DocumentSnapshot;
 
 import java.util.HashMap;
@@ -43,7 +44,7 @@ public class Subcategoria {
         Subcategoria subcategoria = new Subcategoria(
             doc.getString(CAMPO_ID_USUARIO),
             doc.getString(CAMPO_NOMBRE),
-            Gasto.getTipoDeGasto(Math.toIntExact(doc.getLong(CAMPO_TIPO)))
+            Util.tipoDesdeString(doc.getString(CAMPO_TIPO))
         );
 
         subcategoria.setIdSubcategoria(doc.getId());

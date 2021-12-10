@@ -12,16 +12,15 @@ import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.proyectomovilfinal.R;
-import com.example.proyectomovilfinal.data.Gasto;
+import com.example.proyectomovilfinal.Util;
 import com.example.proyectomovilfinal.data.Subcategoria;
 import com.example.proyectomovilfinal.paginas.adapters.AdapterSubcategorias;
 import com.firebase.ui.firestore.FirestoreRecyclerOptions;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
+import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.Query;
-import com.google.firebase.firestore.QueryDocumentSnapshot;
 
-import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -36,13 +35,10 @@ public class PaginaSeleccionSubcategoria extends Fragment {
 
     private int mTipoGasto;
     private List<Subcategoria> mSubcategorias;
-    private int mColumnCount = 2;
-
-    //TODO: Usar el id real del usuario para crear gasto.
-    private final String ID_USUARIO_FAKE = "pXqACrhyoqZpdw8n11n64749YuI2";
 
     private AdapterSubcategorias mAdapter;
 
+    private FirebaseAuth mAuth;
     private FirebaseFirestore mFirestore;
 
     /**
@@ -73,9 +69,9 @@ public class PaginaSeleccionSubcategoria extends Fragment {
             mTipoGasto = getArguments().getInt(TIPO_GASTO);
         }
 
+        mAuth = FirebaseAuth.getInstance();
         mFirestore = FirebaseFirestore.getInstance();
 
-//        obtenerSubcategorias(ID_USUARIO_FAKE);
     }
 
     @Override
@@ -91,8 +87,12 @@ public class PaginaSeleccionSubcategoria extends Fragment {
         fabAgregarSubcategoria.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                AgregarCategoriaFragment dialogoAgregarCategoria = AgregarCategoriaFragment.newInstance(mTipoGasto);
-                dialogoAgregarCategoria.show(getChildFragmentManager(), null);
+
+                if (mAuth.getCurrentUser() != null) {
+                    AgregarCategoriaFragment dialogoAgregarCategoria = AgregarCategoriaFragment
+                            .newInstance(mAuth.getCurrentUser().getUid(), mTipoGasto);
+                    dialogoAgregarCategoria.show(getChildFragmentManager(), null);
+                }
             }
         });
 
@@ -114,10 +114,15 @@ public class PaginaSeleccionSubcategoria extends Fragment {
 
     private void initRecycler(View view) {
 
-        //TODO: Usar id real del usuario autenticado.
+        if (mAuth.getCurrentUser() == null) return;
+
+        String idUsuario = mAuth.getCurrentUser().getUid();
+
+        Log.i(TAG, "ID del usuario para subcategorias: " + idUsuario);
+
         Query query = mFirestore.collection(Subcategoria.NOMBRE_COLECCION_FIRESTORE)
-            .whereEqualTo(Subcategoria.CAMPO_ID_USUARIO, ID_USUARIO_FAKE)
-            .whereEqualTo(Subcategoria.CAMPO_TIPO, Gasto.getTipoDeGasto(mTipoGasto).toString());
+            .whereEqualTo(Subcategoria.CAMPO_ID_USUARIO, idUsuario)
+            .whereEqualTo(Subcategoria.CAMPO_TIPO, Util.getTipoDeGasto(mTipoGasto).toString());
 
         FirestoreRecyclerOptions<Subcategoria> opciones = new FirestoreRecyclerOptions.Builder<Subcategoria>()
             .setQuery(query, Subcategoria.class)
@@ -128,7 +133,8 @@ public class PaginaSeleccionSubcategoria extends Fragment {
         RecyclerView recyclerView = view.findViewById(R.id.lista_subcategorias);
 
         // Usar un layout manager para 2 columnas.
-        recyclerView.setLayoutManager(new GridLayoutManager(view.getContext(), mColumnCount));
+        int columnCount = 2;
+        recyclerView.setLayoutManager(new GridLayoutManager(view.getContext(), columnCount));
 
         recyclerView.setHasFixedSize(true);
         recyclerView.setAdapter(mAdapter);
@@ -146,37 +152,5 @@ public class PaginaSeleccionSubcategoria extends Fragment {
             ft.addToBackStack(null);
             ft.commit();
         });
-    }
-
-    private void obtenerSubcategorias(String idUsuario) {
-
-        List<Subcategoria> subcategorias = new ArrayList<>();
-
-        Log.i(TAG, "Obteniendo subcategorias con tipo: " + mTipoGasto);
-
-        mFirestore.collection(Subcategoria.NOMBRE_COLECCION_FIRESTORE)
-            .whereEqualTo(Subcategoria.CAMPO_ID_USUARIO, idUsuario)
-            .whereEqualTo(Subcategoria.CAMPO_TIPO, mTipoGasto)
-            .get()
-            .addOnCompleteListener(task -> {
-                if (task.isSuccessful() && task.getResult() != null)
-                {
-                    for (QueryDocumentSnapshot doc : task.getResult())
-                    {
-                        subcategorias.add(Subcategoria.fromDoc(doc));
-                        Log.i(TAG, "Subcategoria -> " + doc.getId());
-                    }
-
-                    Log.i(TAG, "Subcategorias obtenidas: " + subcategorias.size());
-
-                } else {
-                    Log.d(TAG, "Error obteniendo documentos");
-                }
-            });
-
-//        if (mAdapter != null) {
-//            mAdapter.setSubcategorias(subcategorias);
-//            mAdapter.notifyDataSetChanged();
-//        }
     }
 }

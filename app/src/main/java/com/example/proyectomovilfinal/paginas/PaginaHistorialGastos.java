@@ -2,6 +2,7 @@ package com.example.proyectomovilfinal.paginas;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -17,11 +18,15 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.example.proyectomovilfinal.AgregarGastoActivity;
 import com.example.proyectomovilfinal.R;
 import com.example.proyectomovilfinal.data.Gasto;
+import com.example.proyectomovilfinal.data.Subcategoria;
 import com.example.proyectomovilfinal.paginas.adapters.AdapterHistorialGastos;
 import com.firebase.ui.firestore.FirestoreRecyclerOptions;
+import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.Query;
+
+import java.util.HashMap;
 
 /**
  * Un fragmento que muestra una lista de gastos.
@@ -37,6 +42,8 @@ public class PaginaHistorialGastos extends Fragment {
     private AdapterHistorialGastos mAdapter;
 
     private FirebaseFirestore mFirestore;
+
+    public static HashMap<String, String> mSubcategoriasUsuario = new HashMap<>();
 
     /**
      * Mandatory empty constructor for the fragment manager to instantiate the
@@ -73,7 +80,6 @@ public class PaginaHistorialGastos extends Fragment {
     {
         View view = inflater.inflate(R.layout.pagina_historial_gastos, container, false);
 
-        // Determinar el adaptador del recycler.
         initRecycler(view);
 
         return view;
@@ -82,8 +88,13 @@ public class PaginaHistorialGastos extends Fragment {
     @Override
     public void onStart() {
         super.onStart();
-        mAdapter.startListening();
-        mAdapter.notifyDataSetChanged();
+
+        obtenerSubcategorias();
+
+        if (mAdapter != null) {
+            mAdapter.startListening();
+            mAdapter.notifyDataSetChanged();
+        }
     }
 
     @Override
@@ -93,11 +104,11 @@ public class PaginaHistorialGastos extends Fragment {
     }
 
     private void initRecycler(View view) {
-        //TODO: Usar el id real del usuario autenticado.
-        final String ID_USUARIO_TEMPORAL = "pXqACrhyoqZpdw8n11n64749YuI2";
+
+        String idUsuario = FirebaseAuth.getInstance().getUid();
 
         Query query = mFirestore.collection(Gasto.NOMBRE_COLECCION_FIRESTORE)
-                .whereEqualTo(Gasto.CAMPO_ID_USUARIO, ID_USUARIO_TEMPORAL)
+                .whereEqualTo(Gasto.CAMPO_ID_USUARIO, idUsuario)
                 .limit(10)
                 .orderBy(Gasto.CAMPO_FECHA, Query.Direction.DESCENDING);
 
@@ -137,6 +148,33 @@ public class PaginaHistorialGastos extends Fragment {
                 startActivity(intent);
             }
         });
+    }
+
+    private void obtenerSubcategorias() {
+
+        String idUsuario = FirebaseAuth.getInstance().getUid();
+        mSubcategoriasUsuario.clear();
+
+        mFirestore.collection(Subcategoria.NOMBRE_COLECCION_FIRESTORE)
+                .whereEqualTo(Subcategoria.CAMPO_ID_USUARIO, idUsuario)
+                .get()
+                .addOnSuccessListener(queryDocumentSnapshots -> {
+
+                    for (DocumentSnapshot doc : queryDocumentSnapshots) {
+                        Subcategoria subcategoria = Subcategoria.fromDoc(doc);
+                        mSubcategoriasUsuario.put(
+                                subcategoria.getIdSubcategoria(),
+                                subcategoria.getNombre()
+                        );
+                    }
+
+                    Log.i(TAG, "Subcategorias obtenidas: " + mSubcategoriasUsuario.size());
+
+                    mAdapter.notifyDataSetChanged();
+                })
+                .addOnFailureListener(e -> {
+                    Log.w(TAG, "Error obteniendo lista de subcategorias: ", e);
+                });
     }
 
     ItemTouchHelper.SimpleCallback mCallback = new ItemTouchHelper.SimpleCallback(

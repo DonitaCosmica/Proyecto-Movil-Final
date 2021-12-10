@@ -1,6 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.example.proyectomovilfinal">
+
+    <uses-permission android:name="android.permission.ACTIVITY_RECOGNITION"/>
     <uses-permission android:name="android.permission.INTERNET"/>
 
     <application
@@ -10,8 +12,11 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.ProyectoMovilFinal">
-        <activity android:name=".RegistrarseActivity"></activity>
-        <activity android:name=".IniciarSesionActivity" /> //mainactivity
+        <activity
+            android:name=".DatosUsuarioActivity"
+            android:exported="false" />
+        <activity android:name=".RegistrarseActivity" />
+        <activity android:name=".IniciarSesionActivity" />
         <activity
             android:name=".MainActivity"
             android:theme="@style/Theme.ProyectoMovilFinal" />

@@ -12,13 +12,13 @@
 
         <item name="android:colorBackground">@color/white</item>
         <item name="colorSurface">@color/blue_gray_800</item>
-        <item name="colorPrimarySurfaceVariant">@color/blue_gray_200</item>
+        <item name="colorPrimarySurfaceVariant">@color/blue_gray_50</item>
         <item name="colorError">@color/red_700</item>
 
         <item name="colorOnPrimary">@color/white</item>
         <item name="colorOnSecondary">@color/white</item>
         <item name="colorOnBackground">@color/blue_gray_800</item>
-        <item name="colorOnSurface">@color/blue_gray_900</item>
+        <item name="colorOnSurface">@color/white</item>
         <item name="colorOnError">@color/white</item>
 
         <!-- Status bar color. -->

@@ -1,4 +1,4 @@
-<resources>
+<resources xmlns:tools="http://schemas.android.com/tools">
     <string name="app_name">Gastos y Pasos</string>
 
     <!-- TODO: Remove or change this placeholder text -->
@@ -15,16 +15,26 @@
     <string name="titulo_inicio">Bienvenido</string>
 
     <!-- Crear y modificar gastos -->
+    <string name="titulo_historial_gastos">Tus Gastos</string>
+    <string name="titulo_gastos_recientes">Gastos recientes</string>
+    <string name="btn_ver_historial_gastos">Ver todos</string>
     <string name="titulo_tipo_gasto">Clasifica tu gasto</string>
     <string name="titulo_nuevo_gasto">Agregar un gasto</string>
     <string name="titulo_editar_gasto">Modificar un gasto</string>
     <string name="descripcion_agregar_gasto">Escribe la cantidad que gastaste, puedes añadir una breve descripción.</string>
+    <string name="gasto_agregado">Gasto agregado</string>
+    <string name="gasto_modificado">Cambios guardados</string>
+
+    <!-- Pasos -->
+    <string name="titulo_historial_pasos">Historial de Pasos</string>
+    <string name="pasos_totales_dia">Total de pasos de hoy</string>
 
     <!-- Comunes -->
     <string name="confirmar">Confirmar</string>
     <string name="continuar">Continuar</string>
     <string name="cancelar">Cancelar</string>
     <string name="cerrar_sesion">Cerrar Sesión</string>
+    <string name="cero">0</string>
 
     <!-- Notificaciones -->
     <string name="id_canal_notif">canal_recordatorios</string>
@@ -34,7 +44,7 @@
     </string>
 
     <string name="titulo_notificacion_presupuesto">Alerta de Presupuesto</string>
-    <string name="contenido_notificacion_presupuesto">Superaste tu presupuesto diario por $</string>
+    <string name="contenido_notificacion_presupuesto">Superaste tu presupuesto diario por </string>
 
     <!-- Activity Presupuesto Diario -->
     <string name="titulo_definir_presupuesto">Presupuesto diario</string>
@@ -46,12 +56,14 @@
     <!-- Subcategorias -->
     <string name="titulo_subcategorias">¿En qué gastaste?</string>
     <string name="hint_agregar_categoria">Snacks</string>
+    <string name="nombre_subcategorias_snacks">Snacks</string>
     <string name="dialog_agregar_subcategoria">Crea una nueva subcategoría de gastos.</string>
 
-    <!-- Iniciar sesion-->
+    <!-- Iniciar sesion y Registro -->
     <string name="titulo_iniciar_sesion">Iniciar Sesión</string>
     <string name="ir_a_registrarse">¿No tienes una cuenta? Regístrate</string>
     <string name="ir_a_inicio_sesion">¿Ya tienes una cuenta? Inicia Sesión</string>
+    <string name="inicio_sesion_en_proceso">Iniciando sesión...</string>
 
     <string name="campo_correo">Correo electrónico</string>
     <string name="campo_password">Contraseña</string>
@@ -62,6 +74,10 @@
     <string name="titulo_registro">Crea una Cuenta</string>
     <string name="btn_registrar">Registrarse</string>
 
+    <!-- RegEx para validacion de email y contraseña -->
+    <string name="regex_validar_email" tools:ignore="TypographyDashes">^[_A-Za-z0-9-\+]+(\.[_A-Za-z0-9-]+)*@[A-Za-z0-9-]+(\.[A-Za-z0-9]+)*(\.[A-Za-z]{2,})$</string>
+    <string name="regex_validar_contrasena">^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d).+$</string>
+
     <!-- Formulario para datos del usuario -->
     <string name="titulo_datos_usuario">Cuéntanos Más Sobre Ti</string>
 
@@ -71,9 +87,30 @@
     <string name="hint_campo_presupuesto">Tu presupuesto diario</string>
 
     <!-- Errores de validacion -->
+    <string name="err_campo_vacio">Este campo es obligatorio.</string>
     <string name="err_correo_no_valido">La dirección de correo no es válida.</string>
+    <string name="err_tam_password">La contraseña debe tener entre 8 y doce caracteres.</string>
+    <string name="err_formato_password">La contraseña debe tener al menos un número y una mayúscula.</string>
+    <string name="err_comparacion_password">La contraseña y la confirmación no coinciden.</string>
+
+    <string name="err_usuario_existente">"El usuario ya existe"</string>
+    <string name="err_registro_fallido">No se pudo registrar el usuario</string>
 
     <string name="err_presupuesto_fuera_rango">El presupuesto tiene un valor fuera del rango permitido.</string>
+
+    <string name="err_subcategoria_vacia">El nombre de categoría no puede estar vacío.</string>
+    <string name="err_subcategoria_extensa">El nombre de categoría debe tener menos de 40 caracteres.</string>
+
+    <string name="err_cantidad_invalida">La cantidad no puede estar vacía.</string>
+    <string name="err_cantidad_mayor_que_0">La cantidad debe ser mayor que 0.</string>
+    <string name="err_descripcion_extensa">La descripción debe tener menos de 100 caracteres.</string>
+
+    <!-- Otros errores -->
+    <string name="err_registro_gasto">Error registrando el gasto</string>
+
+    <string name="err_usuario_no_registrado">No existe un usuario registrado</string>
+    <string name="err_credenciales">Credenciales incorrectas</string>
+    <string name="err_inicio_sesion">Hubo un error al iniciar sesión</string>
 
     <!-- Labels bottom nav view -->
     <string name="bot_nav_gastos">Gastos</string>

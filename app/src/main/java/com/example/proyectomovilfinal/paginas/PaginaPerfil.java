@@ -98,6 +98,7 @@ public class PaginaPerfil extends Fragment {
         mContenidoPerfil = view.findViewById(R.id.tarjeta_datos_usuario);
         mProgressBar = view.findViewById(R.id.progress_perfil);
 
+        mTxtNombre.setVisibility(View.INVISIBLE);
         mContenidoPerfil.setVisibility(View.INVISIBLE);
         mProgressBar.setVisibility(View.VISIBLE);
 
@@ -129,13 +130,14 @@ public class PaginaPerfil extends Fragment {
     private void mostrarPerfil(@NonNull DatosUsuario datosUsuario) {
 
         String nombreCompleto = datosUsuario.getNombre() + " " + datosUsuario.getApellido();
-        String presupuestoConFormato = "$" + Util.fDinero.format(datosUsuario.getPresupuesto());
+        String presupuestoConFormato = Util.fDinero.format(datosUsuario.getPresupuesto());
 
         mTxtNombre.setText(nombreCompleto);
         mTxtEmail.setText(datosUsuario.getEmail());
         mTxtEdad.setText(String.valueOf(datosUsuario.getEdad()));
         mTxtPresupuesto.setText(presupuestoConFormato);
 
+        mTxtNombre.setVisibility(View.VISIBLE);
         mContenidoPerfil.setVisibility(View.VISIBLE);
         mProgressBar.setVisibility(View.INVISIBLE);
     }
