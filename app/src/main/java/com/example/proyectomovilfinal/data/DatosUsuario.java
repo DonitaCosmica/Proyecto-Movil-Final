@@ -3,6 +3,7 @@ package com.example.proyectomovilfinal.data;
 import com.example.proyectomovilfinal.Util;
 import com.google.firebase.firestore.DocumentSnapshot;
 
+import java.util.Date;
 import java.util.HashMap;
 
 public class DatosUsuario {
@@ -15,6 +16,7 @@ public class DatosUsuario {
     public static final String CAMPO_EDAD = "edad";
     public static final String CAMPO_PRESUPUESTO = "presupuesto";
     public static final String CAMPO_TIPO = "tipo";
+    public static final String CAMPO_FECHA_REGISTRO = "fechaRegistro";
 
     private String mIdUsuario;
     private String mNombre;
@@ -23,10 +25,13 @@ public class DatosUsuario {
     private int mEdad;
     private double mPresupuesto;
     private TipoUsuario mTipo;
+    private Date mFechaRegistro;
 
     private DatosUsuario() {}
 
-    public DatosUsuario(String idUsuario, String nombre, String apellido, String email, int edad, double presupuesto, TipoUsuario tipo) {
+    public DatosUsuario(
+            String idUsuario, String nombre, String apellido, String email,
+            int edad, double presupuesto, TipoUsuario tipo) {
         mIdUsuario = idUsuario;
         mNombre = nombre;
         mApellido = apellido;
@@ -34,6 +39,7 @@ public class DatosUsuario {
         mEmail = email;
         mPresupuesto = presupuesto;
         mTipo = tipo;
+        mFechaRegistro = new Date();
     }
 
     public HashMap<String, Object> asDoc() {
@@ -45,6 +51,7 @@ public class DatosUsuario {
         documento.put(CAMPO_EDAD, mEdad);
         documento.put(CAMPO_PRESUPUESTO, mPresupuesto);
         documento.put(CAMPO_TIPO, mTipo.getValor());
+        documento.put(CAMPO_FECHA_REGISTRO, mFechaRegistro);
 
         return documento;
     }
@@ -64,6 +71,7 @@ public class DatosUsuario {
         );
 
         datosUsuario.mIdUsuario = doc.getId();
+        datosUsuario.mFechaRegistro = doc.getDate(CAMPO_FECHA_REGISTRO);
 
         return datosUsuario;
     }
@@ -121,5 +129,12 @@ public class DatosUsuario {
         mTipo = Util.getTipoFromValor(tipo);
     }
 
+    public Date getFechaRegistro() {
+        return mFechaRegistro;
+    }
+
+    public void setFechaRegistro(Date fechaRegistro) {
+        mFechaRegistro = fechaRegistro;
+    }
     //endregion
 }

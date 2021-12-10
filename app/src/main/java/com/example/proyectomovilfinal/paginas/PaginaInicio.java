@@ -137,7 +137,9 @@ public class PaginaInicio extends Fragment {
                         mTxtPasosTotales.setText(pasosTotalesConFormato);
                     }
                     else {
-                        mTxtPasosTotales.setText(getString(R.string.cero));
+                        if (getContext() != null) {
+                            mTxtPasosTotales.setText(getString(R.string.cero));
+                        }
                     }
                 })
                 .addOnFailureListener(e -> {
