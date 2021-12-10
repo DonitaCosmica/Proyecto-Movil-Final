@@ -1,14 +1,13 @@
 <resources xmlns:tools="http://schemas.android.com/tools">
     <string name="app_name">Gastos y Pasos</string>
 
-    <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="temporal_cantidad">2489</string>
     <string name="temporal_costo">$13.59</string>
     <string name="temporal_btn">Botón</string>
     <string name="temporal_proceso">Haciendo Algo...</string>
-    <string name="temporal_nombre_usuario">Juan Ranchero de Vaca</string>
-    <string name="temporal_email">juan@rancho.com</string>
+    <string name="temporal_nombre_usuario">Un nombre</string>
+    <string name="temporal_email">email@gmail.com</string>
     <string name="temporal_edad">29</string>
 
     <!-- Pantalla de inicio -->
@@ -58,6 +57,14 @@
     <string name="hint_agregar_categoria">Snacks</string>
     <string name="nombre_subcategorias_snacks">Snacks</string>
     <string name="dialog_agregar_subcategoria">Crea una nueva subcategoría de gastos.</string>
+
+    <!-- Lista de Usuarios - Admin -->
+    <string name="titulo_lista_usuarios">Usuarios registrados</string>
+
+    <!-- Paginas - Analista -->
+    <string name="titulo_inicio_analista">Bienvenido, Analista</string>
+    <string name="titulo_analisis_usuarios">Usuarios de la App</string>
+    <string name="titulo_analisis_gastos">Gastos y pasos</string>
 
     <!-- Iniciar sesion y Registro -->
     <string name="titulo_iniciar_sesion">Iniciar Sesión</string>
@@ -116,6 +123,9 @@
     <string name="bot_nav_gastos">Gastos</string>
     <string name="bot_nav_pasos">Pasos</string>
     <string name="bot_nav_perfil">Tu Perfil</string>
+    <string name="bot_nav_usuarios">Usuarios</string>
+    <string name="bot_nav_analisis_usuarios">Usuarios Registrados</string>
+    <string name="bot_nav_analisis_gastos">Análisis</string>
 
     <!-- Keys de SharedPreferences -->
     <string name="nombre_archivo_preferencias">preferencias_credenciales</string>

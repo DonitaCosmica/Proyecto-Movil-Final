@@ -4,13 +4,25 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/analista_navigation"
-    app:startDestination="@id/fragmento_pasos">
+    app:startDestination="@id/fragmento_inicio_analista">
 
     <fragment
-        android:id="@+id/fragmento_pasos"
-        android:name="com.example.proyectomovilfinal.paginas.PaginaHistorialPasos"
-        android:label="@string/bot_nav_pasos"
-        tools:layout="@layout/pagina_historial_pasos"/>
+        android:id="@+id/fragmento_inicio_analista"
+        android:name="com.example.proyectomovilfinal.paginas.analista.PaginaInicioAnalista"
+        android:label="@string/bot_nav_inicio"
+        tools:layout="@layout/fragment_pagina_inicio_analista"/>
+
+    <fragment
+        android:id="@+id/fragmento_analisis_usuarios"
+        android:name="com.example.proyectomovilfinal.paginas.analista.PaginaAnalisisUsuarios"
+        android:label="@string/bot_nav_inicio"
+        tools:layout="@layout/fragment_pagina_analisis_usuarios"/>
+
+    <fragment
+        android:id="@+id/fragmento_analisis_gastos"
+        android:name="com.example.proyectomovilfinal.paginas.analista.PaginaAnalisisSnacks"
+        android:label="@string/bot_nav_inicio"
+        tools:layout="@layout/fragment_pagina_analisis_gastos"/>
 
     <fragment
         android:id="@+id/fragmento_perfil"
