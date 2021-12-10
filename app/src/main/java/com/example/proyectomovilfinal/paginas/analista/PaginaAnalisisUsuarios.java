@@ -1,6 +1,7 @@
 package com.example.proyectomovilfinal.paginas.analista;
 
 import android.content.Intent;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -8,6 +9,7 @@ import android.view.ViewGroup;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.ItemTouchHelper;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -18,9 +20,21 @@ import com.example.proyectomovilfinal.R;
 import com.example.proyectomovilfinal.data.Gasto;
 import com.example.proyectomovilfinal.paginas.adapters.AdapterHistorialGastos;
 import com.firebase.ui.firestore.FirestoreRecyclerOptions;
+import com.github.mikephil.charting.charts.BarChart;
+import com.github.mikephil.charting.data.BarData;
+import com.github.mikephil.charting.data.BarDataSet;
+import com.github.mikephil.charting.data.BarEntry;
+import com.github.mikephil.charting.interfaces.datasets.IBarDataSet;
+import com.google.firebase.Timestamp;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.firestore.EventListener;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.FirebaseFirestoreException;
 import com.google.firebase.firestore.Query;
+import com.google.firebase.firestore.QueryDocumentSnapshot;
+import com.google.firebase.firestore.QuerySnapshot;
+
+import java.util.ArrayList;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -62,6 +76,94 @@ public class PaginaAnalisisUsuarios extends Fragment {
         View view = inflater.inflate(R.layout.fragment_pagina_analisis_usuarios, container, false);
 
 //        initRecycler(view);
+
+        BarChart barChart = view.findViewById(R.id.barChart);
+
+        mFirestore = FirebaseFirestore.getInstance();
+
+        mFirestore.collection("usuarios").addSnapshotListener(new EventListener<QuerySnapshot>() {
+            @Override
+            public void onEvent(@Nullable QuerySnapshot value, @Nullable FirebaseFirestoreException e) {
+
+                Timestamp fecha;
+                ArrayList<BarEntry> usuarios = new ArrayList<>();
+                int ene = 0; int feb = 0; int mar = 0; int abr = 0; int may = 0; int jun = 0;
+                int jul = 0; int ago = 0; int sep = 0; int oct = 0; int nov = 0; int dic = 0;
+
+                for (QueryDocumentSnapshot documentSnapshot : value){
+
+                    if (documentSnapshot.contains("fecha")) {
+
+                        fecha = documentSnapshot.getTimestamp("fecha");
+                        int mes = fecha.toDate().getMonth();
+
+                        switch (mes){
+
+                            case 0:
+                                ene++;
+                                break;
+                            case 1:
+                                feb++;
+                                break;
+                            case 2:
+                                mar++;
+                                break;
+                            case 3:
+                                abr++;
+                                break;
+                            case 4:
+                                may++;
+                                break;
+                            case 5:
+                                jun++;
+                                break;
+                            case 6:
+                                jul++;
+                                break;
+                            case 7:
+                                ago++;
+                                break;
+                            case 8:
+                                sep++;
+                                break;
+                            case 9:
+                                oct++;
+                                break;
+                            case 10:
+                                nov++;
+                                break;
+                            case 11:
+                                dic++;
+                                break;
+                        }
+                    }
+                }
+
+                usuarios.add(new BarEntry(1, ene));
+                usuarios.add(new BarEntry(2, feb));
+                usuarios.add(new BarEntry(3, mar));
+                usuarios.add(new BarEntry(4, abr));
+                usuarios.add(new BarEntry(5, may));
+                usuarios.add(new BarEntry(6, jun));
+                usuarios.add(new BarEntry(7, jul));
+                usuarios.add(new BarEntry(8, ago));
+                usuarios.add(new BarEntry(9, sep));
+                usuarios.add(new BarEntry(10, oct));
+                usuarios.add(new BarEntry(11, nov));
+                usuarios.add(new BarEntry(12, dic));
+
+                IBarDataSet barDataSet = new BarDataSet(usuarios, "usuarios");
+                barDataSet.setValueTextColor(Color.BLACK);
+                barDataSet.setValueTextSize(12f);
+
+                BarData barData = new BarData(barDataSet);
+
+                barChart.setFitBars(true);
+                barChart.setData(barData);
+                barChart.getDescription().setText("Bar Chart Example");
+                barChart.animateY(2000);
+            }
+        });
 
         return view;
     }
